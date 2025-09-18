@@ -236,6 +236,7 @@
         <div class="candidates-grid">
         {% for cv in cvs %}
             <div class="candidate-card">
+                {% if not statut %}
                 {% if cv.statut.description != "Recrute" %}
                     <button type="button" class="recruit-button"
                             data-bs-toggle="modal"
@@ -244,6 +245,7 @@
                             data-candidat-nom="{{ cv.candidat.prenom }} {{ cv.candidat.nom }}">
                         Recruter
                     </button>
+                {% endif %}
                 {% endif %}
 
 
