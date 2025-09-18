@@ -254,7 +254,7 @@ $(document).ready(function() {
             let text = $( '#{{ field }}-select option[value="' + id + '"]' ).text() || id;
             const checkbox = `
                 <label>
-                    <input type="checkbox" name="{{ field }}_obligatoire[]" value="${id}">
+                    <input type="checkbox" name="{{ field }}_obligatoire[]" value="${text}">
                     Obligatoire pour ${text}
                 </label>
             `;
