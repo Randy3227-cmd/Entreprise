@@ -10,14 +10,38 @@
     body { 
         font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; 
         margin: 0; 
-        background: #f9f9f9;
+        background: #f0f0f0;
         color: #333333;
+        display: flex;
     }
 
+    /* Conteneur global : sidebar + contenu */
+    .container {
+        display: flex;
+        width: 100%;
+    }
+
+    /* Sidebar (déjà incluse) */
+    .rh-sidebar {
+        width: 250px; /* adapte à ton design */
+        flex-shrink: 0;
+    }
+
+    /* Zone principale */
     .content {
-        margin-left: 260px;
+        flex: 1;
+        display: flex;
+        justify-content: center; /* centre l’annonce */
+        padding: 2rem;
+    }
+
+    .a4-page {
+        background: #ffffff;
+        width: 210mm;
+        min-height: 297mm;
         padding: 3rem;
-        min-height: 100vh;
+        border-radius: 6px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     }
 
     h1 {
@@ -25,15 +49,13 @@
         font-weight: 600;
         color: #222222;
         margin-bottom: 1.5rem;
+        text-align: center;
     }
 
     .announcement {
-        background: #ffffff;
-        padding: 2rem;
-        border-radius: 10px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-        line-height: 1.7;
+        line-height: 1.8;
         font-size: 1rem;
+        text-align: justify;
     }
 
     .highlight {
@@ -44,7 +66,8 @@
     .actions {
         display: flex;
         gap: 1rem;
-        margin-top: 2rem;
+        margin-top: 3rem;
+        justify-content: center;
         flex-wrap: wrap;
     }
 
@@ -81,75 +104,102 @@
         color: #ffffff;
     }
 
-    @media (max-width: 768px) {
-        .content {
-            margin-left: 0;
-            padding: 1.5rem;
-        }
-        .actions {
+    @media (max-width: 900px) {
+        .container {
             flex-direction: column;
+        }
+        .rh-sidebar {
+            width: 100%;
+        }
+        .a4-page {
+            width: 100%;
+            min-height: auto;
         }
     }
 </style>
 </head>
 <body>
 
-<div class="content">
-    <h1>{{ annonce.role }}</h1>
-
-    <div class="announcement">
-        <p>
-            Nous recherchons un(e) <span class="highlight">{{ annonce.poste.nom }}</span> pour rejoindre notre équipe à 
-            {{ annonce.lieu_de_poste|default:"un lieu à définir" }}. Ce poste propose un salaire de 
-            {{ annonce.salaire|default:"à discuter" }} Ariary par mois et un horaire de travail de 
-            {{ annonce.horaire_de_travail|default:"flexible" }} heures par semaine. Les candidatures seront accéptées jusqu'au
-            {% if annonce.date_limite_postule %}{{ annonce.date_limite_postule|date:"d/m/Y H:i" }}{% else %}à confirmer{% endif %}.
-        </p>
-
-        {% if formations %}
-        <p>
-            Le/la candidat(e) idéal(e) devra avoir les formations suivantes : 
-            {% for f in formations %}
-                {{ f.formation }}{% if f.est_obligatoire %} (obligatoire){% endif %}{% if not forloop.last %}, {% else %}.{% endif %}
-            {% endfor %}
-        </p>
-        {% endif %}
-
-        {% if competences %}
-        <p>
-            Les compétences attendues pour ce poste incluent : 
-            {% for c in competences %}
-                {{ c.competence }}{% if c.est_obligatoire %} (obligatoire){% endif %}{% if not forloop.last %}, {% else %}.{% endif %}
-            {% endfor %}
-        </p>
-        {% endif %}
-
-        {% if langues %}
-        <p>
-            La maîtrise des langues suivantes est requise : 
-            {% for l in langues %}
-                {{ l.langue }}{% if l.est_obligatoire %} (obligatoire){% endif %}{% if not forloop.last %}, {% else %}.{% endif %}
-            {% endfor %}
-        </p>
-        {% endif %}
-
-        {% if loisirs %}
-        <p>
-            Des loisirs particuliers sont appréciés : 
-            {% for lo in loisirs %}
-                {{ lo.loisir }}{% if lo.est_obligatoire %} (obligatoire){% endif %}{% if not forloop.last %}, {% else %}.{% endif %}
-            {% endfor %}
-        </p>
-        {% endif %}
-
-        <p>
-            Les candidats doivent fournir les documents suivants : {{ annonce.document_necessaire|default:"à préciser" }}.
-        </p>
+<div class="container">
+    <div class="rh-sidebar">
+        {% include 'rh/rh_sidebar.html' %}
     </div>
+        <div class="content">
+            <div class="a4-page">
+                <h1>{{ annonce.role }}</h1>
+        <div class="announcement">
+            <p>
+                Nous recherchons un(e) <span class="highlight">{{ annonce.poste.nom }}</span> pour rejoindre notre équipe 
+                dynamique à {{ annonce.lieu_de_poste|default:"un lieu à définir" }}. 
+                Ce poste propose un salaire attractif de {{ annonce.salaire|default:"à discuter" }} Ariary par mois 
+                et un horaire de travail de {{ annonce.horaire_de_travail|default:"flexible" }} heures par semaine. 
+                Les candidatures seront acceptées jusqu’au 
+                {% if annonce.date_limite_postule %}{{ annonce.date_limite_postule|date:"d/m/Y H:i" }}{% else %}à confirmer{% endif %}.
+            </p>
 
-    <div class="actions">
-        <a href="{% url 'candidats_annonce' annonce.id %}" class="btn btn-primary">Voir tous les candidats</a>
-        <a href="{% url 'liste_annonces' %}" class="btn btn-secondary">← Retour à la liste</a>
+            <p>
+                Le/la candidat(e) idéal(e) doit posséder une excellente capacité d’adaptation, un sens aigu 
+                des responsabilités et une grande rigueur professionnelle. Nous mettons particulièrement 
+                l’accent sur l’esprit d’équipe et la volonté de contribuer au développement de l’entreprise 
+                sur le long terme. Une expérience préalable dans un poste similaire constitue un atout 
+                considérable, bien que nous restions ouverts aux profils prometteurs et motivés.
+            </p>
+
+            {% if formations %}
+            <p>
+                Les formations requises incluent : 
+                {% for f in formations %}
+                    {{ f.formation }}{% if f.est_obligatoire %} (obligatoire){% endif %}{% if not forloop.last %}, {% else %}.{% endif %}
+                {% endfor %}
+            </p>
+            {% endif %}
+
+            {% if competences %}
+            <p>
+                Les compétences attendues couvrent : 
+                {% for c in competences %}
+                    {{ c.competence }}{% if c.est_obligatoire %} (obligatoire){% endif %}{% if not forloop.last %}, {% else %}.{% endif %}
+                {% endfor %}
+            </p>
+            {% endif %}
+
+            {% if langues %}
+            <p>
+                La maîtrise des langues suivantes est requise : 
+                {% for l in langues %}
+                    {{ l.langue }}{% if l.est_obligatoire %} (obligatoire){% endif %}{% if not forloop.last %}, {% else %}.{% endif %}
+                {% endfor %}
+            </p>
+            {% endif %}
+
+            {% if loisirs %}
+            <p>
+                Les loisirs ou centres d’intérêt liés au leadership, à la créativité ou aux activités 
+                collaboratives seront particulièrement appréciés : 
+                {% for lo in loisirs %}
+                    {{ lo.loisir }}{% if lo.est_obligatoire %} (obligatoire){% endif %}{% if not forloop.last %}, {% else %}.{% endif %}
+                {% endfor %}
+            </p>
+            {% endif %}
+
+            <p>
+                Enfin, les candidats doivent fournir les documents suivants : {{ annonce.document_necessaire|default:"à préciser" }}.  
+                Toute candidature incomplète ou transmise hors délai ne pourra malheureusement pas être prise en compte.
+            </p>
+
+            <p>
+                Rejoindre notre entreprise, c’est intégrer une structure en pleine croissance, bénéficier 
+                d’un environnement de travail moderne, collaboratif et stimulant, et avoir l’opportunité 
+                de développer des compétences solides au sein d’une équipe motivée et passionnée. 
+                Nous attendons avec enthousiasme de découvrir vos candidatures.
+            </p>
+        </div>
+
+            <div class="actions">
+                <a href="{% url 'candidats_annonce' annonce.id %}" class="btn btn-primary">Voir tous les candidats</a>
+                <a href="{% url 'liste_annonces' %}" class="btn btn-secondary">← Retour à la liste</a>
+            </div>
+        </div>
     </div>
 </div>
 

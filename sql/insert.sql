@@ -5,6 +5,11 @@ INSERT INTO blog_poste (nom) VALUES
 ('Analyste financier'),
 ('Responsable marketing');
 
+INSERT INTO blog_statutcv (description) VALUES
+('CV invalide'),
+('CV valide');
+
+
 INSERT INTO test_poste (id_test, id_poste) VALUES 
 (1, 1), 
 (2, 2),
