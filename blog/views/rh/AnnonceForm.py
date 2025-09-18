@@ -53,7 +53,7 @@ def creer_annonce(request):
                     model.objects.create(
                         annonce=annonce,
                         **{key_prefix: obj},
-                        est_obligatoire=str(obj.id) in obligatory_ids
+                        est_obligatoire=str(obj.description) in obligatory_ids
                     )
 
         # Traiter toutes les catégories

@@ -11,6 +11,21 @@
             margin: 0; 
             background: #f9f9f9; 
             color: #333333;
+            display: flex;
+        }
+
+        /* Sidebar */
+        .rh-sidebar {
+            width: 250px;
+            flex-shrink: 0;
+            background: #2c3e50;
+            min-height: 100vh;
+            color: white;
+        }
+
+        /* Contenu principal */
+        .main-content {
+            flex: 1;
             padding: 3rem;
         }
         
@@ -149,6 +164,15 @@
         
         @media (max-width: 768px) {
             body {
+                flex-direction: column;
+            }
+
+            .rh-sidebar {
+                width: 100%;
+                min-height: auto;
+            }
+
+            .main-content {
                 padding: 1.5rem;
             }
             
@@ -171,65 +195,69 @@
 </head>
 <body>
 
-<h1>Offres d'emploi disponibles</h1>
+    <div class="rh-sidebar">
+        {% include 'rh/candidat_sidebar.html' %}
+    </div>
 
-<div class="controls">
-    <label for="datetimeFilter">Afficher les offres disponibles le :</label>
-    <input type="datetime-local" id="datetimeFilter">
-    <button type="button" id="clearFilter" class="btn">Effacer</button>
-    <div class="stats">Offres visibles : <strong><span id="visibleCount">0</span></strong></div>
-</div>
+    <div class="main-content">
+        <h1>Offres d'emploi disponibles</h1>
 
-<div class="table-container">
-    <table id="annoncesTable">
-        <thead>
-            <tr>
-                <th>Rôle</th>
-                <th>Salaire</th>
-                <th>Horaire</th>
-                <th>Lieu</th>
-                <th>Date limite</th>
-                <th>Documents</th>
-                <th>Poste</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for annonce in annonces %}
-            <tr data-datetime="{% if annonce.date_limite_postule %}{{ annonce.date_limite_postule|date:'Y-m-d\TH:i' }}{% endif %}">
-                <td>{{ annonce.role }}</td>
-                <td>{% if annonce.salaire %}{{ annonce.salaire }}{% else %}-{% endif %}</td>
-                <td>{% if annonce.horaire_de_travail %}{{ annonce.horaire_de_travail }}h{% else %}-{% endif %}</td>
-                <td>{{ annonce.lieu_de_poste|default:"-" }}</td>
-                <td>{% if annonce.date_limite_postule %}{{ annonce.date_limite_postule|date:"d/m/Y H:i" }}{% else %}-{% endif %}</td>
-                <td>{{ annonce.document_necessaire|default:"-" }}</td>
-                <td>{{ annonce.poste.nom }}</td>
-                <td>
-                    <a href="{% url 'detail_annonceCandidat' annonce.id %}" class="btn btn-primary">
-                        Voir détails
-                    </a>
-                </td>
-            </tr>
-            {% empty %}
-            <tr>
-                <td colspan="8" class="empty-state">Aucune offre disponible</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-</div>
+        <div class="controls">
+            <label for="datetimeFilter">Afficher les offres disponibles le :</label>
+            <input type="datetime-local" id="datetimeFilter">
+            <button type="button" id="clearFilter" class="btn">Effacer</button>
+        </div>
 
-<div id="noResults" class="no-results">
-    <h3>Aucune offre trouvée</h3>
-    <p>Aucune offre ne correspond à votre filtre de date.</p>
-</div>
+        <div class="table-container">
+            <table id="annoncesTable">
+                <thead>
+                    <tr>
+                        <th>Rôle</th>
+                        <th>Salaire</th>
+                        <th>Horaire</th>
+                        <th>Lieu</th>
+                        <th>Date limite</th>
+                        <th>Documents</th>
+                        <th>Poste</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for annonce in annonces %}
+                    <tr data-datetime="{% if annonce.date_limite_postule %}{{ annonce.date_limite_postule|date:'Y-m-d\TH:i' }}{% endif %}">
+                        <td>{{ annonce.role }}</td>
+                        <td>{% if annonce.salaire %}{{ annonce.salaire }}{% else %}-{% endif %}</td>
+                        <td>{% if annonce.horaire_de_travail %}{{ annonce.horaire_de_travail }}h{% else %}-{% endif %}</td>
+                        <td>{{ annonce.lieu_de_poste|default:"-" }}</td>
+                        <td>{% if annonce.date_limite_postule %}{{ annonce.date_limite_postule|date:"d/m/Y H:i" }}{% else %}-{% endif %}</td>
+                        <td>{{ annonce.document_necessaire|default:"-" }}</td>
+                        <td>{{ annonce.poste.nom }}</td>
+                        <td>
+                            <a href="{% url 'detail_annonceCandidat' annonce.id %}" class="btn btn-primary">
+                                Voir détails
+                            </a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="8" class="empty-state">Aucune offre disponible</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div id="noResults" class="no-results">
+            <h3>Aucune offre trouvée</h3>
+            <p>Aucune offre ne correspond à votre filtre de date.</p>
+        </div>
+    </div>
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const dateInput = document.getElementById('datetimeFilter');
     const clearBtn = document.getElementById('clearFilter');
     const rows = Array.from(document.querySelectorAll('#annoncesTable tbody tr'));
-    const visibleCount = document.getElementById('visibleCount');
     const noResults = document.getElementById('noResults');
 
     function updateVisibility() {
@@ -253,7 +281,6 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
 
-        visibleCount.textContent = count;
         noResults.style.display = (count === 0) ? 'block' : 'none';
     }
 
