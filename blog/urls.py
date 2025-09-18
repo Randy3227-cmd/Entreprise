@@ -11,6 +11,7 @@ from blog.views.rh.AnnonceListeRh import detail_annonceRh  # import depuis ton s
 from blog.views.rh.AnnonceListeRh import candidats_annonce  # import depuis ton sous-dossier
 from blog.views.rh.Accueil import *
 from blog.views.rh.qcm import *
+from blog.views.rh.ClassifierCV import classifier_cv
 
 urlpatterns = [
     path('', accueil, name='acceuil'),
@@ -25,6 +26,7 @@ urlpatterns = [
     path('rh/annonce/<int:annonce_id>/candidats/', candidats_annonce, name='candidats_annonce'),
     path('candidat/test/<int:annonce_id>/<int:candidat_id>/', showQCM, name='showQCM'),
     path('candidat/test/score', score_test, name='score_test'),
+    path('candidat/cv/classifier/<int:annonce_id>/', classifier_cv, name='classifier_cv'),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -200,6 +200,11 @@
 <div class="content">
     <h1>Candidats pour : {{ annonce.role }}</h1>
 
+    <a href="{% url 'classifier_cv' annonce.id %}">
+        <button id="classify-btn" class="back-link" style="margin-bottom: 2rem;">
+            Classification des CV
+        </button>
+    </a>
     {% if cvs %}
         <div class="candidates-grid">
         {% for cv in cvs %}
