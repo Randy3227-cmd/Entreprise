@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Recrutement</title>
+</head>
+<body>
+    <div style="text-align:center; padding:50px; font-family:Arial;">
+        <h2>✅ Recrutement Réussi!</h2>
+        <p id="status">📥 Téléchargement du contrat...</p>
+        <p>Redirection dans <span id="countdown">3</span> secondes</p>
+    </div>
+    
+    <script>
+        window.onload = function() {
+            // Iframe invisible pour téléchargement
+            const iframe = document.createElement('iframe');
+            iframe.style.display = 'none';
+            iframe.src = '{{ contrat_url }}';
+            document.body.appendChild(iframe);
+            
+            document.getElementById('status').textContent = '✅ Contrat en téléchargement!';
+            
+            // Countdown redirection
+            let count = 3;
+            const timer = setInterval(() => {
+                count--;
+                document.getElementById('countdown').textContent = count;
+                if (count <= 0) {
+                    clearInterval(timer);
+                    window.location.href = '{{ redirect_url }}';
+                }
+            }, 1000);
+        };
+    </script>
+</body>
+</html>
