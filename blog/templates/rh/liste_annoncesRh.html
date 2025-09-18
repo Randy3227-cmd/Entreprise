@@ -1,0 +1,149 @@
+{% load static %}
+{% include 'rh/rh_sidebar.html' %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liste des annonces</title>
+    <style>
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; 
+            margin: 0; 
+            background: #f5f5f5; /* fond clair */
+            color: #333333; /* texte sombre pour contraste */
+        }
+
+        .content {
+            margin-left: 260px;
+            padding: 3rem;
+            min-height: 100vh;
+        }
+
+        h1 { 
+            font-size: 2rem;
+            font-weight: 500;
+            color: #222222;
+            margin-bottom: 2rem;
+            letter-spacing: -0.5px;
+        }
+
+        .table-container {
+            background: #ffffff; /* fond clair */
+            border: 1px solid #ddd; /* bordure douce */
+            border-radius: 8px;
+            overflow-x: auto;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+        }
+
+        table { 
+            width: 100%; 
+            border-collapse: collapse; 
+        }
+
+        th, td { 
+            padding: 1rem 1.5rem; 
+            text-align: left; 
+            border-bottom: 1px solid #eee;
+        }
+
+        th { 
+            background: #f0f0f0; /* léger gris */
+            color: #333333;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        td {
+            color: #555555;
+        }
+
+        tr:hover {
+            background: rgba(0, 0, 0, 0.03); /* effet hover léger */
+        }
+
+        .btn {
+            background: #ffffff;
+            color: #1e3a8a; /* bleu doux */
+            border: 1px solid #1e3a8a;
+            padding: 0.5rem 1rem;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            display: inline-block;
+            border-radius: 4px;
+        }
+
+        .btn:hover {
+            background: #1e3a8a;
+            color: #ffffff;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: #888888;
+        }
+
+        @media (max-width: 768px) {
+            .content {
+                margin-left: 0;
+                padding: 1.5rem;
+            }
+
+            h1 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="content">
+    <h1>Liste des annonces</h1>
+
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Rôle</th>
+                    <th>Salaire</th>
+                    <th>Horaire</th>
+                    <th>Lieu</th>
+                    <th>Date limite</th>
+                    <th>Documents</th>
+                    <th>Poste</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for annonce in annonces %}
+                <tr>
+                    <td>{{ annonce.role }}</td>
+                    <td>{% if annonce.salaire %}{{ annonce.salaire }}{% else %}-{% endif %}</td>
+                    <td>{% if annonce.horaire_de_travail %}{{ annonce.horaire_de_travail }}h{% else %}-{% endif %}</td>
+                    <td>{{ annonce.lieu_de_poste|default:"-" }}</td>
+                    <td>{% if annonce.date_limite_postule %}{{ annonce.date_limite_postule|date:"d/m/Y H:i" }}{% else %}-{% endif %}</td>
+                    <td>{{ annonce.document_necessaire|default:"-" }}</td>
+                    <td>{{ annonce.poste.nom }}</td>
+                    <td>
+                        <a href="{% url 'detail_annonceRh' annonce.id %}" class="btn">
+                            Détails
+                        </a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="8" class="empty-state">Aucune annonce disponible</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+</body>
+</html>

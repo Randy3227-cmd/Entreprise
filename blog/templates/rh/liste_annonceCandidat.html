@@ -1,0 +1,271 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liste des annonces</title>
+    <style>
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; 
+            margin: 0; 
+            background: #f9f9f9; 
+            color: #333333;
+            padding: 3rem;
+        }
+        
+        h1 { 
+            font-size: 2rem;
+            font-weight: 100;
+            color: #222222;
+            text-align: center;
+            margin-bottom: 3rem;
+            letter-spacing: -1px;
+        }
+        
+        .controls { 
+            background: #ffffff;
+            border: 1px solid #dddddd;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            flex-wrap: wrap;
+            border-radius: 6px;
+        }
+        
+        .controls label {
+            color: #555555;
+            font-size: 0.9rem;
+        }
+        
+        .controls input {
+            background: #ffffff;
+            border: 1px solid #cccccc;
+            color: #222222;
+            padding: 0.5rem;
+            font-family: inherit;
+            outline: none;
+            border-radius: 4px;
+        }
+        
+        .controls input:focus {
+            border-color: #999999;
+        }
+        
+        .btn {
+            background: transparent;
+            color: #555555;
+            border: 1px solid #cccccc;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: inherit;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 0.9rem;
+            border-radius: 4px;
+        }
+        
+        .btn:hover {
+            color: #222222;
+            border-color: #222222;
+        }
+        
+        .btn-primary {
+            background: #222222;
+            color: #ffffff;
+            border-color: #222222;
+        }
+        
+        .btn-primary:hover {
+            background: transparent;
+            color: #222222;
+        }
+        
+        .stats {
+            margin-left: auto;
+            color: #888888;
+            font-size: 0.85rem;
+        }
+        
+        .stats strong {
+            color: #222222;
+        }
+        
+        .table-container {
+            background: #ffffff;
+            border: 1px solid #dddddd;
+            overflow-x: auto;
+            border-radius: 6px;
+        }
+        
+        table { 
+            width: 100%; 
+            border-collapse: collapse; 
+        }
+        
+        th, td { 
+            padding: 1rem 1.5rem; 
+            text-align: left; 
+            border-bottom: 1px solid #eeeeee;
+        }
+        
+        th { 
+            background: #f5f5f5; 
+            color: #222222;
+            font-weight: 400;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        td {
+            color: #555555;
+        }
+        
+        tr:hover {
+            background: rgba(0, 0, 0, 0.02);
+        }
+        
+        .empty-state,
+        .no-results { 
+            text-align: center;
+            padding: 3rem;
+            color: #888888;
+            background: #ffffff;
+            border: 1px solid #dddddd;
+            margin-top: 2rem;
+            display: none;
+            border-radius: 6px;
+        }
+        
+        .no-results h3 {
+            color: #555555;
+            font-weight: 300;
+            margin-bottom: 0.5rem;
+        }
+        
+        @media (max-width: 768px) {
+            body {
+                padding: 1.5rem;
+            }
+            
+            h1 {
+                font-size: 1.5rem;
+            }
+            
+            .controls {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 1rem;
+            }
+            
+            .stats {
+                margin-left: 0;
+                order: -1;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<h1>Offres d'emploi disponibles</h1>
+
+<div class="controls">
+    <label for="datetimeFilter">Afficher les offres disponibles le :</label>
+    <input type="datetime-local" id="datetimeFilter">
+    <button type="button" id="clearFilter" class="btn">Effacer</button>
+    <div class="stats">Offres visibles : <strong><span id="visibleCount">0</span></strong></div>
+</div>
+
+<div class="table-container">
+    <table id="annoncesTable">
+        <thead>
+            <tr>
+                <th>Rôle</th>
+                <th>Salaire</th>
+                <th>Horaire</th>
+                <th>Lieu</th>
+                <th>Date limite</th>
+                <th>Documents</th>
+                <th>Poste</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for annonce in annonces %}
+            <tr data-datetime="{% if annonce.date_limite_postule %}{{ annonce.date_limite_postule|date:'Y-m-d\TH:i' }}{% endif %}">
+                <td>{{ annonce.role }}</td>
+                <td>{% if annonce.salaire %}{{ annonce.salaire }}{% else %}-{% endif %}</td>
+                <td>{% if annonce.horaire_de_travail %}{{ annonce.horaire_de_travail }}h{% else %}-{% endif %}</td>
+                <td>{{ annonce.lieu_de_poste|default:"-" }}</td>
+                <td>{% if annonce.date_limite_postule %}{{ annonce.date_limite_postule|date:"d/m/Y H:i" }}{% else %}-{% endif %}</td>
+                <td>{{ annonce.document_necessaire|default:"-" }}</td>
+                <td>{{ annonce.poste.nom }}</td>
+                <td>
+                    <a href="{% url 'detail_annonceCandidat' annonce.id %}" class="btn btn-primary">
+                        Voir détails
+                    </a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="8" class="empty-state">Aucune offre disponible</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<div id="noResults" class="no-results">
+    <h3>Aucune offre trouvée</h3>
+    <p>Aucune offre ne correspond à votre filtre de date.</p>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const dateInput = document.getElementById('datetimeFilter');
+    const clearBtn = document.getElementById('clearFilter');
+    const rows = Array.from(document.querySelectorAll('#annoncesTable tbody tr'));
+    const visibleCount = document.getElementById('visibleCount');
+    const noResults = document.getElementById('noResults');
+
+    function updateVisibility() {
+        const selected = dateInput.value;
+        let count = 0;
+
+        rows.forEach(row => {
+            const annonceDT = row.dataset.datetime;
+
+            if (!selected || !annonceDT) {
+                row.style.display = '';
+                count++;
+                return;
+            }
+
+            if (annonceDT >= selected) {
+                row.style.display = '';
+                count++;
+            } else {
+                row.style.display = 'none';
+            }
+        });
+
+        visibleCount.textContent = count;
+        noResults.style.display = (count === 0) ? 'block' : 'none';
+    }
+
+    dateInput.addEventListener('change', updateVisibility);
+    clearBtn.addEventListener('click', function() {
+        dateInput.value = '';
+        updateVisibility();
+    });
+
+    updateVisibility();
+});
+</script>
+
+</body>
+</html>

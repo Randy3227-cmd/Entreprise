@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Test QCM - {{ test.test.nom }}</title>
+</head>
+<body>
+    <h1>Test : {{ test.test.nom }}</h1>
+    <h2>Poste : {{ test.poste.nom }}</h2>
+    <h3>Annonce : {{ test.annonce.role }}</h3>
+
+    {% if test.questions %}
+        <form method="post" action="/candidat/test/score">
+            {% csrf_token %}
+
+            <input type="hidden" name="candidat_id" value="{{ test.candidat_id }}">
+            <input type="hidden" name="annonce_id" value="{{ test.annonce.id }}">
+            
+            {% for question in test.questions %}
+                <div style="margin-bottom: 20px;">
+                    <p><strong>{{ forloop.counter }} :</strong> {{ question.texte }}</p>
+                    {% if question.reponses %}
+                        {% for reponse in question.reponses %}
+                            <div>
+                                <input type="radio" name="question_{{ question.id }}" value="{{ reponse.id }}" id="reponse_{{ reponse.id }}">
+                                <label for="reponse_{{ reponse.id }}">{{ reponse.texte }}</label>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <p><em>Aucune réponse disponible pour cette question.</em></p>
+                    {% endif %}
+                </div>
+            {% endfor %}
+            <button type="submit">Soumettre le test</button>
+        </form>
+    {% else %}
+        <p><em>Aucune question disponible pour ce test.</em></p>
+    {% endif %}
+</body>
+</html>

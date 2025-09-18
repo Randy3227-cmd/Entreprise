@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Résultat du test</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        h2 { color: #2c3e50; }
+        .score { font-size: 18px; margin-bottom: 20px; }
+        .correct { color: green; font-weight: bold; }
+        .incorrect { color: red; font-weight: bold; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+        th { background: #f4f4f4; }
+    </style>
+</head>
+<body>
+    <h2>Résultat du QCM pour le poste : {{ poste.nom }}</h2>
+
+    <h3>{{ candidat.nom }} {{ candidat.prenom }} </h3>
+
+    <div class="score">
+        ✅ Score obtenu : <b>{{ score.obtenus }}</b> / {{ score.total }}<br>
+        📊 Pourcentage : <b>{{ score.pourcentage }}%</b>
+    </div>
+
+    {%if decision == 0 %}
+        <h2> Afaka manao entretien </h2>
+        <p> votre entretien est prevue pour le {{ date_entretien }} </p>
+    {%  else %}
+        <h2> Tsy afaka manao entretien </h2>
+    {% endif %}
+
+    <h3>Détails des réponses :</h3>
+    <table>
+        <tr>
+            <th>Question</th>
+            <th>Votre réponse</th>
+            <th>Résultat</th>
+        </tr>
+
+        {% for r in resultats %}
+        <tr>
+            <td>{{ r.question }}</td>
+            <td>
+                {% if r.reponse_donnee %}
+                    {{ r.reponse_donnee }}
+                {% else %}
+                    <i>Non répondu</i>
+                {% endif %}
+            </td>
+            <td>
+                {% if r.correcte %}
+                    <span class="correct">✔ Correct</span>
+                {% else %}
+                    <span class="incorrect">✘ Incorrect</span>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>

@@ -1,0 +1,202 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portail de Recrutement</title>
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, #f2f2f2 0%, #e6e6e6 100%);
+    color: #222;
+    line-height: 1.6;
+    overflow-x: hidden;
+}
+
+/* --- Hero Section --- */
+.hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 0 20px;
+    position: relative;
+}
+
+/* Décorations discrètes */
+.hero::before {
+    content: '';
+    position: absolute;
+    top: 20%;
+    right: 10%;
+    width: 200px;
+    height: 200px;
+    border: 1px solid #cccccc;
+    border-radius: 50%;
+    opacity: 0.2;
+}
+
+.hero::after {
+    content: '';
+    position: absolute;
+    bottom: 15%;
+    left: 8%;
+    width: 120px;
+    height: 120px;
+    border: 1px solid #d1d1d1;
+    opacity: 0.15;
+}
+
+.hero-content {
+    max-width: 700px;
+    z-index: 2;
+}
+
+/* Titres */
+h1 {
+    font-size: 4rem;
+    font-weight: 400;
+    color: #333333;
+    margin-bottom: 1.5rem;
+    letter-spacing: -2px;
+    line-height: 1.1;
+}
+.accent {
+    color: #555555;
+}
+
+.subtitle {
+    font-size: 1.3rem;
+    color: #666666;
+    margin-bottom: 4rem;
+    font-weight: 300;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Boutons */
+.buttons {
+    display: flex;
+    gap: 2.5rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+}
+.btn {
+    display: inline-block;
+    padding: 1.2rem 3rem;
+    font-size: 1.1rem;
+    text-decoration: none;
+    border: 2px solid transparent;
+    font-weight: 400;
+    transition: all 0.2s ease;
+    position: relative;
+    overflow: hidden;
+    border-radius: 6px;
+}
+
+.btn-primary {
+    background: #ffffff;
+    color: #222222;
+    border-color: #ffffff;
+}
+.btn-primary:hover {
+    background: transparent;
+    color: #222222;
+    border-color: #222222;
+}
+
+.btn-secondary {
+    background: transparent;
+    color: #333333;
+    border: 2px solid #cccccc;
+}
+.btn-secondary:hover {
+    background: #ffffff;
+    color: #222222;
+    border-color: #222222;
+}
+
+/* Divider */
+.divider {
+    width: 60px;
+    height: 1px;
+    background: #cccccc;
+    margin: 0 auto 3rem auto;
+}
+
+/* Stats */
+.stats {
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 4rem;
+    color: #777777;
+    font-size: 0.9rem;
+}
+.stat {
+    text-align: center;
+}
+.stat-number {
+    display: block;
+    font-size: 1.5rem;
+    color: #333333;
+    font-weight: 400;
+}
+
+/* --- Responsive --- */
+@media (max-width: 768px) {
+    h1 { font-size: 3rem; letter-spacing: -1px; }
+    .subtitle { font-size: 1.1rem; margin-bottom: 3rem; }
+    .buttons { flex-direction: column; gap: 1.5rem; }
+    .btn { width: 280px; text-align: center; }
+    .stats { position: relative; margin-top: 4rem; bottom: auto; transform: none; gap: 2rem; font-size: 0.8rem; }
+    .hero::before, .hero::after { display: none; }
+}
+@media (max-width: 480px) {
+    .stats { flex-direction: column; gap: 1rem; }
+}
+</style>
+</head>
+<body>
+<section class="hero">
+    <div class="hero-content">
+        <h1>Recrutement <span class="accent">Moderne</span></h1>
+        <div class="divider"></div>
+        <p class="subtitle">Connectez les talents exceptionnels aux opportunités qui les valorisent</p>
+        
+        <div class="buttons">
+            <a href="{% url 'rh_login' %}" class="btn btn-primary">Espace Admin RH</a>
+            <a href="{% url 'liste_annoncesCandidat' %}" class="btn btn-secondary">Découvrir les offres</a>
+        </div>
+    </div>
+
+    <div class="stats">
+        <div class="stat">
+            <span class="stat-number">500+</span>
+            <span>Candidats</span>
+        </div>
+        <div class="stat">
+            <span class="stat-number">50+</span>
+            <span>Entreprises</span>
+        </div>
+        <div class="stat">
+            <span class="stat-number">95%</span>
+            <span>Satisfaction</span>
+        </div>
+    </div>
+</section>
+</body>
+</html>

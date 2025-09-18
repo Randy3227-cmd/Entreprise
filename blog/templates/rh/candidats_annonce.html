@@ -1,0 +1,300 @@
+{% load static %}
+{% include 'rh/rh_sidebar.html' %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Candidats pour {{ annonce.role }}</title>
+<style>
+    body { 
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; 
+        margin: 0; 
+        background: #f5f5f5; /* fond clair */
+        color: #333333;
+    }
+    
+    .content {
+        margin-left: 260px;
+        padding: 3rem;
+        min-height: 100vh;
+    }
+    
+    h1 { 
+        font-size: 2rem;
+        font-weight: 400;
+        color: #222222;
+        margin-bottom: 3rem;
+        letter-spacing: -0.5px;
+    }
+    
+    .candidates-grid {
+        display: grid;
+        gap: 2rem;
+        margin-bottom: 3rem;
+    }
+    
+    .candidate-card {
+        background: #ffffff; /* clair */
+        border: 1px solid #ddd; /* léger contraste */
+        padding: 2rem;
+        display: grid;
+        grid-template-columns: auto 1fr;
+        gap: 2rem;
+        align-items: start;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+    }
+    
+    .candidate-photo {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid #ccc;
+    }
+    
+    .candidate-photo-placeholder {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        background: #e0e0e0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #888888;
+        font-size: 2rem;
+    }
+    
+    .candidate-info {
+        flex: 1;
+    }
+    
+    .candidate-header {
+        margin-bottom: 1.5rem;
+    }
+    
+    .candidate-name {
+        font-size: 1.5rem;
+        font-weight: 500;
+        color: #222222;
+        margin-bottom: 0.25rem;
+    }
+    
+    .candidate-title {
+        color: #555555;
+        font-size: 1rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    .candidate-resume {
+        color: #444444;
+        line-height: 1.5;
+    }
+    
+    .skills-section {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1.5rem;
+        margin-top: 2rem;
+    }
+    
+    .skill-group {
+        background: #f8f8f8;
+        border: 1px solid #ddd;
+        padding: 1rem;
+        border-radius: 5px;
+    }
+    
+    .skill-group-title {
+        color: #1e3a8a;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 0.75rem;
+        font-weight: 500;
+    }
+    
+    .skill-item {
+        color: #555555;
+        font-size: 0.85rem;
+        margin-bottom: 0.5rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .skill-item:last-child {
+        margin-bottom: 0;
+    }
+    
+    .skill-level {
+        color: #888888;
+        font-size: 0.75rem;
+    }
+    
+    .skill-duration {
+        color: #999999;
+        font-size: 0.75rem;
+    }
+    
+    .empty-state {
+        text-align: center;
+        padding: 4rem 2rem;
+        color: #666666;
+        background: #fafafa;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+    }
+    
+    .empty-state h2 {
+        font-size: 1.5rem;
+        font-weight: 400;
+        margin-bottom: 0.5rem;
+        color: #444444;
+    }
+    
+    .back-link {
+        display: inline-block;
+        padding: 1rem 2rem;
+        background: #ffffff;
+        color: #1e3a8a;
+        text-decoration: none;
+        border: 2px solid #1e3a8a;
+        transition: all 0.2s ease;
+        margin-top: 2rem;
+        border-radius: 5px;
+    }
+    
+    .back-link:hover {
+        background: #1e3a8a;
+        color: #ffffff;
+    }
+    
+    @media (max-width: 768px) {
+        .content {
+            margin-left: 0;
+            padding: 1.5rem;
+        }
+        
+        h1 {
+            font-size: 1.5rem;
+        }
+        
+        .candidate-card {
+            grid-template-columns: 1fr;
+            gap: 1rem;
+            padding: 1.5rem;
+            text-align: center;
+        }
+        
+        .skills-section {
+            grid-template-columns: 1fr;
+            gap: 1rem;
+        }
+    }
+</style>
+</head>
+<body>
+
+<div class="content">
+    <h1>Candidats pour : {{ annonce.role }}</h1>
+
+    {% if cvs %}
+        <div class="candidates-grid">
+        {% for cv in cvs %}
+            <div class="candidate-card">
+                <div>
+                    {% if cv.photo %}
+                        <img src="{{ cv.photo.url }}" alt="Photo de {{ cv.candidat.nom }}" class="candidate-photo">
+                    {% else %}
+                        <div class="candidate-photo-placeholder">
+                            {{ cv.candidat.prenom.0 }}{{ cv.candidat.nom.0 }}
+                        </div>
+                    {% endif %}
+                </div>
+                
+                <div class="candidate-info">
+                    <div class="candidate-header">
+                        <div class="candidate-name">{{ cv.candidat.prenom }} {{ cv.candidat.nom }}</div>
+                        <div class="candidate-title">{{ cv.titre }}</div>
+                        {% if cv.resume %}
+                            <div class="candidate-resume">{{ cv.resume }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="skills-section">
+                        <div class="skill-group">
+                            <div class="skill-group-title">Formations</div>
+                            {% for f in cv.formations.all %}
+                                <div class="skill-item">
+                                    <span>{{ f.formation }}</span>
+                                </div>
+                                {% if f.etablissement %}
+                                    <div class="skill-duration">{{ f.etablissement }}</div>
+                                {% endif %}
+                                {% if f.date_debut or f.date_fin %}
+                                    <div class="skill-duration">{{ f.date_debut|default:"?" }} → {{ f.date_fin|default:"?" }}</div>
+                                {% endif %}
+                            {% empty %}
+                                <div class="skill-item" style="color: #999999;">Aucune formation</div>
+                            {% endfor %}
+                        </div>
+
+                        <div class="skill-group">
+                            <div class="skill-group-title">Compétences</div>
+                            {% for c in cv.competences.all %}
+                                <div class="skill-item">
+                                    <span>{{ c.competence }}</span>
+                                    {% if c.niveau %}<span class="skill-level">{{ c.niveau }}</span>{% endif %}
+                                </div>
+                            {% empty %}
+                                <div class="skill-item" style="color: #999999;">Aucune compétence</div>
+                            {% endfor %}
+                        </div>
+
+                        <div class="skill-group">
+                            <div class="skill-group-title">Langues</div>
+                            {% for l in cv.langues.all %}
+                                <div class="skill-item">
+                                    <span>{{ l.langue }}</span>
+                                    {% if l.niveau %}<span class="skill-level">{{ l.niveau }}</span>{% endif %}
+                                </div>
+                            {% empty %}
+                                <div class="skill-item" style="color: #999999;">Aucune langue</div>
+                            {% endfor %}
+                        </div>
+
+                        <div class="skill-group">
+                            <div class="skill-group-title">Loisirs</div>
+                            {% for lo in cv.loisirs.all %}
+                                <div class="skill-item">
+                                    <span>{{ lo.loisir }}</span>
+                                </div>
+                            {% empty %}
+                                <div class="skill-item" style="color: #999999;">Aucun loisir</div>
+                            {% endfor %}
+                        </div>
+                        <div class="skill-group">
+                            <div class="skill-group-title">Status</div>
+                                <div class="skill-item">
+                                    <span>{{ cv.statut }}</span>
+                                </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+        </div>
+    {% else %}
+        <div class="empty-state">
+            <h2>Aucun candidat</h2>
+            <p>Aucune candidature n'a été reçue pour cette annonce.</p>
+        </div>
+    {% endif %}
+
+    <a href="{% url 'detail_annonceRh' annonce.id %}" class="back-link">← Retour à l'annonce</a>
+</div>
+
+</body>
+</html>

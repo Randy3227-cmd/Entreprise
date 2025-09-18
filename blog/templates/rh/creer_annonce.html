@@ -1,0 +1,284 @@
+{% load static %}
+{% include 'rh/rh_sidebar.html' %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Entrer les besoins</title>
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <style>
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; 
+            margin: 0; 
+            background: #f2f2f2; 
+            color: #333333;
+        }
+        
+        .content {
+            margin-left: 260px;
+            padding: 3rem;
+            min-height: 100vh;
+        }
+        
+        h1 { 
+            font-size: 2rem;
+            font-weight: 100;
+            color: #222222;
+            margin-bottom: 3rem;
+            letter-spacing: -1px;
+        }
+        
+        form { 
+            background: #ffffff; 
+            padding: 2.5rem; 
+            border: 1px solid #dddddd;
+            max-width: 900px; 
+            margin: auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+        
+        fieldset { 
+            border: 1px solid #cccccc; 
+            padding: 1.5rem; 
+            margin-bottom: 2rem; 
+            background: #fafafa;
+            border-radius: 6px;
+        }
+        
+        legend { 
+            font-weight: 500;
+            color: #222222;
+            padding: 0 0.5rem;
+            font-size: 1.1rem;
+        }
+        
+        label { 
+            display: block; 
+            margin-top: 1rem;
+            color: #555555;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        input[type="text"], 
+        input[type="number"], 
+        input[type="datetime-local"], 
+        select { 
+            width: 100%; 
+            padding: 0.75rem; 
+            background: #ffffff;
+            border: 1px solid #cccccc;
+            color: #222222;
+            font-family: inherit;
+            outline: none;
+            border-radius: 4px;
+        }
+        
+        input:focus, select:focus {
+            border-color: #999999;
+            background: #f9f9f9;
+        }
+        
+        input::placeholder {
+            color: #999999;
+        }
+        
+        .checkbox-container { 
+            margin-top: 1rem;
+            background: #f9f9f9;
+            padding: 1rem;
+            border: 1px solid #cccccc;
+            border-radius: 4px;
+        }
+        
+        .checkbox-container label { 
+            display: block;
+            margin: 0.5rem 0;
+            font-size: 0.85rem;
+            color: #555555;
+        }
+        
+        input[type="checkbox"] {
+            width: auto;
+            margin-right: 0.5rem;
+        }
+        
+        button { 
+            background: #222222; 
+            color: #ffffff; 
+            padding: 1rem 2rem; 
+            border: 2px solid #222222; 
+            cursor: pointer; 
+            font-size: 1rem;
+            font-family: inherit;
+            transition: all 0.2s ease;
+            margin-top: 1rem;
+            border-radius: 6px;
+        }
+        
+        button:hover { 
+            background: #ffffff; 
+            color: #222222;
+            border-color: #222222;
+        }
+
+        /* ---------------- Select2 clair ---------------- */
+        .select2-container--default .select2-selection--multiple {
+            background: #ffffff !important;
+            border: 1px solid #cccccc !important;
+            color: #333333 !important;
+        }
+
+        .select2-container--default .select2-selection--multiple .select2-selection__choice {
+            background: #eeeeee !important;
+            color: #222222 !important;
+            border: 1px solid #cccccc !important;
+            border-radius: 4px;
+            padding: 0 8px;
+            margin-top: 4px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .select2-container--default .select2-selection--multiple .select2-selection__choice:hover {
+            background: #cccccc !important;
+            color: #000000 !important;
+        }
+
+        .select2-container--default .select2-results__option {
+            background: #ffffff !important;
+            color: #222222 !important;
+        }
+
+        .select2-container--default .select2-results__option--highlighted {
+            background: #f0f0f0 !important;
+            color: #000000 !important;
+        }
+
+        .select2-dropdown {
+            background: #ffffff !important;
+            border: 1px solid #cccccc !important;
+        }
+
+        /* On supprime le X, suppression via clic sur le tag */
+        .select2-container--default .select2-selection--multiple .select2-selection__choice__remove {
+            display: none;
+        }
+        
+        @media (max-width: 768px) {
+            .content {
+                margin-left: 0;
+                padding: 1.5rem;
+            }
+            
+            h1 {
+                font-size: 1.5rem;
+            }
+            
+            form {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="content">
+    <h1>Créer une nouvelle offre</h1>
+    <form method="post">
+        {% csrf_token %}
+
+        <fieldset>
+            <legend>Informations principales</legend>
+            <label>Rôle:</label>
+            <input type="text" name="role" required>
+
+            <label>Salaire:</label>
+            <input type="number" step="0.01" name="salaire">
+
+            <label>Horaire de travail:</label>
+            <input type="number" name="horaire_de_travail">
+
+            <label>Lieu:</label>
+            <input type="text" name="lieu_de_poste">
+            
+            <label>Date limite :</label>
+            <input type="datetime-local" name="date_limite_postule">
+
+            <label>Documents nécessaires:</label>
+            <input type="text" name="document_necessaire">
+
+            <label>Poste:</label>
+            <select name="poste">
+                {% for p in postes %}
+                    <option value="{{ p.id }}">{{ p.nom }}</option>
+                {% endfor %}
+            </select>
+        </fieldset>
+
+        {% for field, items in champs %}
+        <fieldset>
+            <legend>{{ field|capfirst }}</legend>
+            <select class="multi-select" id="{{ field }}-select" name="{{ field }}_ids[]" multiple="multiple">
+                {% for item in items %}
+                    <option value="{{ item.id }}">{{ item.description }}</option>
+                {% endfor %}
+            </select>
+
+            <div id="{{ field }}-obligatoire" class="checkbox-container">
+                <!-- Les cases "obligatoire" seront générées dynamiquement -->
+            </div>
+        </fieldset>
+        {% endfor %}
+
+        <button type="submit">Créer l'offre</button>
+    </form>
+</div>
+
+<script>
+$(document).ready(function() {
+    {% for field, items in champs %}
+    $('#{{ field }}-select').select2({
+        tags: true,
+        tokenSeparators: [',', ';'],
+        placeholder: "Sélectionnez ou ajoutez..."
+    }).on('change', function() {
+        const selected = $(this).val() || [];
+        const container = $('#{{ field }}-obligatoire');
+        container.empty();
+        selected.forEach(function(id){
+            let text = $( '#{{ field }}-select option[value="' + id + '"]' ).text() || id;
+            const checkbox = `
+                <label>
+                    <input type="checkbox" name="{{ field }}_obligatoire[]" value="${id}">
+                    Obligatoire pour ${text}
+                </label>
+            `;
+            container.append(checkbox);
+        });
+    });
+
+    // Suppression par clic sur le tag
+    $('#{{ field }}-select').on('select2:selecting', function(e) {
+        // Ne rien faire, clic normal ajoute
+    }).on('select2:unselecting', function(e) {
+        // Ne rien faire, permet suppression via clic sur tag
+    });
+    $('#{{ field }}-select').on('click', '.select2-selection__choice', function(e){
+        var $el = $(this);
+        var val = $el.data('data').id;
+        var select = $('#{{ field }}-select');
+        var current = select.val() || [];
+        current = current.filter(v => v != val);
+        select.val(current).trigger('change');
+    });
+    {% endfor %}
+});
+</script>
+
+</body>
+</html>
