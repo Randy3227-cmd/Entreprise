@@ -126,11 +126,11 @@ def postuler(request, annonce_id):
                 )
 
         if cv_passe_test(cv, annonce):
-            cv.statut = get_object_or_404(StatutCV, id=2)  
+            cv.statut = get_object_or_404(StatutCV, id=2) 
+            cv.save()
             return redirect("showQCM", annonce_id, candidat.id)
         # else:
         #     cv.statut = get_object_or_404(StatutCV, id=2) 
-        cv.save()
 
         return redirect("liste_annoncesCandidat")
 
