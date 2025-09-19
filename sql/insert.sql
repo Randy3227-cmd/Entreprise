@@ -12,6 +12,7 @@ INSERT INTO blog_statutcv (description) VALUES
 ('entretien reussi'),
 ('recrute');
 
+
 INSERT INTO test_poste (id_test, id_poste) VALUES 
 (1, 1), 
 (2, 2),
