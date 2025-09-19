@@ -127,6 +127,7 @@ def postuler(request, annonce_id):
 
         if cv_passe_test(cv, annonce):
             cv.statut = get_object_or_404(StatutCV, id=2)  
+            return redirect("showQCM", annonce_id, candidat.id)
         # else:
         #     cv.statut = get_object_or_404(StatutCV, id=2) 
         cv.save()
@@ -138,5 +139,6 @@ def postuler(request, annonce_id):
         "champs": champs.items(),
         "test" : test 
     }
+
     return render(request, "rh/postuler.html", context)
 

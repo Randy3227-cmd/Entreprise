@@ -3,9 +3,23 @@ from blog.models.rh.rh import *
 from blog.models.rh.Annonce import *
 from blog.models.rh.Candidat import *
 from django.db.models import Sum
+from django.db.models import Exists, OuterRef
 
 def planning(request):
-    plannings = PlanningEntretien.objects.select_related("id_candidat").all().order_by("date_entretien")
+    plannings = (
+        PlanningEntretien.objects
+        .select_related("id_candidat", "id_annonce")
+        .annotate(
+            has_score=Exists(
+                ScoreEntretien.objects.filter(
+                    id_candidat=OuterRef("id_candidat"),
+                    id_annonce=OuterRef("id_annonce")
+                )
+            )
+        )
+        .filter(has_score=False)  # seulement ceux sans note
+        .order_by("date_entretien")
+    )
 
     context = {
         "plannings": plannings
@@ -13,17 +27,16 @@ def planning(request):
     return render(request, "rh/planning_list.html", context)
 
 def evaluation(request, planning_id):
-    # Récupération du planning et du candidat
+
     planning = get_object_or_404(PlanningEntretien, id=planning_id)
-    candidat = get_object_or_404(Candidat, id=planning.id_candidat.id)
+    candidat = planning.id_candidat
     annonce = planning.id_annonce
 
-    # Récupération du CV du candidat pour cette annonce
     try:
-        annonce_cv = AnnonceCV.objects.get(annonce=annonce, cv__candidat=candidat)
-        cv = annonce_cv.cv
-    except AnnonceCV.DoesNotExist:
-        cv = None  # Aucun CV trouvé pour ce candidat et cette annonce
+        cv = CV.objects.get(candidat=candidat, annoncecv__annonce=annonce)
+    except CV.DoesNotExist:
+        cv = None
+
 
     return render(request, "rh/evaluation.html", {
         "planning": planning,
@@ -36,7 +49,12 @@ def evaluation_score (request):
     planning_id = request.POST.get("planning_id")
 
     planning = get_object_or_404(PlanningEntretien, id=planning_id)
-    candidat = get_object_or_404(Candidat, id=candidat_id)
+    candidat = planning.id_candidat
+
+    try:
+        cv = CV.objects.get(candidat=candidat, annoncecv__annonce=planning.id_annonce)
+    except CV.DoesNotExist:
+        cv = None
 
     score = request.POST.get("score")
     point = 0
@@ -70,6 +88,9 @@ def evaluation_score (request):
         id_annonce=planning.id_annonce,
         note=note_total
     )
+
+    cv.statut = StatutCV.objects.get(description='entretien reussi')
+    cv.save()
 
     plannings = PlanningEntretien.objects.select_related("id_candidat").all().order_by("date_entretien")
 
