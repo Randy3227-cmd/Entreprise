@@ -371,9 +371,11 @@ button:hover {
 </style>
 </head>
 <body>
-
-<div class="main-content">
-    <div class="container">
+    
+    <div class="main-content">
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+        <div class="container">
     <!-- En-tête avec photo et info de base -->
     <div class="cv-header">
         <div class="photo-section">
@@ -427,8 +429,6 @@ button:hover {
         </div>
     </div>
 
-    <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}
 
         <div class="cv-body">
             <!-- Info sur le poste -->
