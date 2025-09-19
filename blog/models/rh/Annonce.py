@@ -61,6 +61,20 @@ class AnnonceCV(models.Model):
     def __str__(self):
         return f"{self.annonce} - {self.cv}"
     
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
 class AnnonceAge(models.Model):
     annonce = models.ForeignKey("Annonce", on_delete=models.CASCADE)
     age = models.IntegerField(blank=True, null=True)
