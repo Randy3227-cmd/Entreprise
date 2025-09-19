@@ -133,13 +133,15 @@ class DjangoSession(models.Model):
         db_table = 'django_session'
 
 
-class PlanningEntretient(models.Model):
+
+class PlanningEntretien(models.Model):
     date_entretien = models.DateField(blank=True, null=True)
     id_candidat = models.ForeignKey(Candidat, models.DO_NOTHING, db_column='id_candidat')
+    id_annonce = models.ForeignKey(Annonce, models.DO_NOTHING, db_column='id_annonce')
 
     class Meta:
         managed = False
-        db_table = 'planning_entretient'
+        db_table = 'planning_entretien'
 
 class Question(models.Model):
     question = models.CharField(max_length=255, blank=True, null=True)
