@@ -53,9 +53,11 @@ def candidats_annonce(request, annonce_id):
 
     # Récupère tous les CV liés à cette annonce
     cvs = CV.objects.filter(annoncecv__annonce=annonce).distinct()
+    has_recrute = cvs.filter(statut__description__iexact='Recrute').exists()
 
     context = {
         "annonce": annonce,
         "cvs": cvs,
+        "statut": has_recrute,
     }
     return render(request, "rh/candidats_annonce.html", context)
