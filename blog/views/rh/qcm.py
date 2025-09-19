@@ -57,8 +57,13 @@ def score_test(request):
         
         annonce = get_object_or_404(Annonce, id=annonce_id)
         candidat = get_object_or_404(Candidat, id=candidat_id)
-        date_entretien = date.today() + timedelta(days=2)
+        date_entretien = date.today() + timedelta(days=5)
     
+        try:
+            cv = CV.objects.get(candidat=candidat, annoncecv__annonce=annonce)
+        except CV.DoesNotExist:
+            cv = None
+        
         poste = annonce.poste
         test_poste = TestPoste.objects.filter(id_poste=poste).first()
         if not test_poste:
@@ -131,10 +136,14 @@ def score_test(request):
             decision = 1
 
         if decision == 0:
-            PlanningEntretient.objects.create(
+            PlanningEntretien.objects.create(
                 date_entretien=date_entretien,
-                id_candidat=candidat
+                id_candidat=candidat,
+                id_annonce=annonce
             )
+
+            cv.statut = StatutCV.objects.get(description='Test valide')
+            cv.save()
 
         context = {
             "annonce": annonce,

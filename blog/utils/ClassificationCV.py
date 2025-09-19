@@ -5,7 +5,7 @@ from blog.models import (
 def score_cv(cv, annonce):
     score = 0
 
-    if cv.statut.id == 2:
+    if cv.statut.id >= 2:
         score += 100
     elif cv.statut.id == 1:
         score += 10

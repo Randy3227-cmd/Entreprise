@@ -205,8 +205,16 @@ CREATE TABLE Score_entretien (
     id_candidat INT NOT NULL REFERENCES blog_candidat(id)
 );
 
-CREATE TABLE planning_entretient (
+CREATE TABLE planning_entretien (
     id SERIAL PRIMARY KEY,
     date_entretien DATE,
-    id_candidat INT NOT NULL REFERENCES blog_candidat(id)
+    id_candidat INT NOT NULL REFERENCES blog_candidat(id),
+    id_annonce INT NOT NULL REFERENCES blog_annonce(id)
+);
+
+CREATE TABLE score_total (
+    id SERIAL PRIMARY KEY,
+    id_candidat INT NOT NULL REFERENCES blog_candidat(id),
+    id_annonce INT NOT NULL REFERENCES blog_annonce(id),
+    note INT
 );
