@@ -7,8 +7,10 @@ INSERT INTO blog_poste (nom) VALUES
 
 INSERT INTO blog_statutcv (description) VALUES
 ('CV invalide'),
-('CV valide');
-
+('CV valide'),
+('Test valide'),
+('entretien reussi'),
+('recrute');
 
 INSERT INTO test_poste (id_test, id_poste) VALUES 
 (1, 1), 

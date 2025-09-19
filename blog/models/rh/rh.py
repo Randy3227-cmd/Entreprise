@@ -132,6 +132,7 @@ class DjangoSession(models.Model):
         managed = False
         db_table = 'django_session'
 
+
 class PlanningEntretient(models.Model):
     date_entretien = models.DateField(blank=True, null=True)
     id_candidat = models.ForeignKey(Candidat, models.DO_NOTHING, db_column='id_candidat')
@@ -186,6 +187,16 @@ class ScoreQuestion(models.Model):
     class Meta:
         managed = False
         db_table = 'score_question'
+
+
+class ScoreTotal(models.Model):
+    id_candidat = models.ForeignKey(Candidat, models.DO_NOTHING, db_column='id_candidat')
+    id_annonce = models.ForeignKey(Annonce, models.DO_NOTHING, db_column='id_annonce')
+    note = models.IntegerField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'score_total'
 
 
 class Test(models.Model):
