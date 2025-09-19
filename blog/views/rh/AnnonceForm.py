@@ -3,6 +3,7 @@ from blog.models import (
     Annonce, Poste, Competence, Langue, Loisir, Formation,
     AnnonceCompetence, AnnonceLangue, AnnonceLoisir, AnnonceFormation
 )
+from blog.models.rh.rh import AnnonceStatus
 
 def creer_annonce(request):
     # Récupérer toutes les données existantes pour les sélections
@@ -32,7 +33,11 @@ def creer_annonce(request):
             document_necessaire=doc,
             poste_id=id_poste
         )
-
+        # Statut de l'annonce
+        AnnonceStatus.objects.create(
+            annonce=annonce,
+            status=False
+        )
         # Fonction pour traiter chaque catégorie
         def process_items(model, key_prefix):
             selected_ids = request.POST.getlist(f"{key_prefix}_ids[]")

@@ -1,14 +1,19 @@
 from django.shortcuts import render
 from blog.models.rh.Annonce import *
 from blog.models.rh.Candidat import *
+from blog.models.rh.rh import AnnonceStatus
 from django.shortcuts import get_object_or_404
 def liste_annonces(request):
     # Récupère toutes les annonces avec le poste associé
     annonces = Annonce.objects.select_related('poste').all().order_by('-date_limite_postule')
+    #Filtre les annonces dont le statut est True (fermées)
+    annonces = [annonce for annonce in annonces if not AnnonceStatus.objects.filter(annonce=annonce, status=True).exists()]
     return render(request, 'rh/liste_annoncesRh.html', {'annonces': annonces})
 def liste_annoncesCandidat(request):
     # Récupère toutes les annonces avec le poste associé
     annonces = Annonce.objects.select_related('poste').all().order_by('-date_limite_postule')
+    #Filtre les annonces dont le statut est True (fermées)
+    annonces = [annonce for annonce in annonces if not AnnonceStatus.objects.filter(annonce=annonce, status=True).exists()]
     return render(request, 'rh/liste_annonceCandidat.html', {'annonces': annonces})
 def detail_annonceCandidat(request, annonce_id):
     annonce = get_object_or_404(Annonce, id=annonce_id)

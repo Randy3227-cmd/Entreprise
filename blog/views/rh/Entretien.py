@@ -6,6 +6,7 @@ from django.db.models import Sum
 from django.db.models import Exists, OuterRef
 
 def planning(request):
+    # Récupérer les plannings restants : pas encore notés ET dont l’annonce n’est pas fermée
     plannings = (
         PlanningEntretien.objects
         .select_related("id_candidat", "id_annonce")
@@ -17,7 +18,8 @@ def planning(request):
                 )
             )
         )
-        .filter(has_score=False)  # seulement ceux sans note
+        .filter(has_score=False)  # uniquement sans note
+        .exclude(id_annonce__annoncestatus__status=True)  # exclure annonces fermées
         .order_by("date_entretien")
     )
 
@@ -44,7 +46,7 @@ def evaluation(request, planning_id):
         "cv": cv
     })
 
-def evaluation_score (request):
+def evaluation_score(request):
     candidat_id = request.POST.get("candidat_id")
     planning_id = request.POST.get("planning_id")
 
@@ -69,18 +71,21 @@ def evaluation_score (request):
             point = 12
         elif score == 2:
             point = 16
-        
+
+    # Création du score d’entretien
     ScoreEntretien.objects.create(
         note=point,
         id_candidat=candidat,
         id_annonce=planning.id_annonce
     )
 
+    # Calcul du total QCM
     total_score_qcm = ScoreQuestion.objects.filter(
         id_candidat=candidat,
         id_annonce=planning.id_annonce
     ).aggregate(total=Sum('note'))['total'] or 0
 
+    # Note finale
     note_total = (point + (total_score_qcm * 2)) / 2
 
     ScoreTotal.objects.create(
@@ -89,9 +94,12 @@ def evaluation_score (request):
         note=note_total
     )
 
-    cv.statut = StatutCV.objects.get(description='entretien reussi')
-    cv.save()
+    # Met à jour le statut du CV si réussite
+    if note_total >= 10 and cv:
+        cv.statut = StatutCV.objects.get(description='entretien reussi')
+        cv.save()
 
+    # Récupérer les plannings restants : pas encore notés ET dont l’annonce n’est pas fermée
     plannings = (
         PlanningEntretien.objects
         .select_related("id_candidat", "id_annonce")
@@ -103,7 +111,8 @@ def evaluation_score (request):
                 )
             )
         )
-        .filter(has_score=False)  # seulement ceux sans note
+        .filter(has_score=False)  # uniquement sans note
+        .exclude(id_annonce__annoncestatus__status=True)  # exclure annonces fermées
         .order_by("date_entretien")
     )
 

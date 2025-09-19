@@ -1,30 +1,113 @@
+{% load static %}
+{% include 'rh/rh_sidebar.html' %}
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Planning des entretiens</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: "Segoe UI", sans-serif;
+            background: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        .main-content {
+            margin-left: 260px;
+            padding: 2rem;
+        }
+        .container {
+            max-width: 900px;
+            width: 100%;
+            background: #fff;
+            border: 1px solid #e5e7eb;
+            border-radius: 4px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            padding: 2rem;
+        }
+        h1 { margin-bottom: 1.5rem; color: #111827; }
+        input[type="date"] {
+            padding: 0.5rem;
+            border: 1px solid #d1d5db;
+            border-radius: 4px;
+            margin-bottom: 1rem;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 0.8rem;
+            text-align: left;
+        }
+        th {
+            background: #f4f4f4;
+            font-weight: 600;
+        }
+        a {
+            text-decoration: none;
+            color: #374151;
+            font-weight: 500;
+        }
+        a:hover { color: #111827; }
+        @media (max-width: 768px) {
+            .main-content { margin-left: 0; padding: 1rem; }
+        }
+    </style>
 </head>
 <body>
-    <h1>Planning des entretiens</h1>
+    <div class="main-content">
+        <div class="container">
+            <h1>Planning des entretiens</h1>
 
-    {% if plannings %}
-        <table border="1" cellpadding="8">
-            <tr>
-                {% comment %} <th>ID</th> {% endcomment %}
-                <th>Candidat</th>
-                <th>Date Entretien</th>
-                <th></th>
-            </tr>
-            {% for p in plannings %}
-            <tr>
-                {% comment %} <td>{{ p.id }}</td> {% endcomment %}
-                <td>{{ p.id_candidat.nom }} {{ p.id_candidat.prenom }}</td>
-                <td>{{ p.date_entretien|date:"d/m/Y" }}</td>
-                <td><a href="/rh/entretien/evaluation/{{ p.id }}"> Evaluer </a></td>
-            </tr>
-            {% endfor %}
-        </table>
-    {% else %}
-        <p>Aucun entretien planifié.</p>
-    {% endif %}
+            <label for="filter-date">Filtrer par date :</label>
+            <input type="date" id="filter-date">
+
+            {% if plannings %}
+            <table id="planning-table">
+                <thead>
+                    <tr>
+                        <th>Candidat</th>
+                        <th>Date Entretien</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for p in plannings %}
+                    <tr data-date="{{ p.date_entretien|date:'Y-m-d' }}">
+                        <td>{{ p.id_candidat.nom }} {{ p.id_candidat.prenom }}</td>
+                        <td>{{ p.date_entretien|date:"d/m/Y" }}</td>
+                        <td><a href="/rh/entretien/evaluation/{{ p.id }}">Evaluer</a></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+                <p>Aucun entretien planifié.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <script>
+        const filterInput = document.getElementById('filter-date');
+        const table = document.getElementById('planning-table');
+        const rows = table ? Array.from(table.querySelectorAll('tbody tr')) : [];
+
+        filterInput?.addEventListener('input', function() {
+            const selectedDate = this.value; // YYYY-MM-DD
+            rows.forEach(row => {
+                if (!selectedDate || row.dataset.date === selectedDate) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        });
+    </script>
 </body>
 </html>
