@@ -168,35 +168,30 @@ INSERT INTO Test (nom) VALUES
 ('QCM Analyste financier'),
 ('QCM Responsable marketing');
 
--- Développeur : Questions 1 → 5
 INSERT INTO test_question (id_question, id_test) VALUES (1,1);
 INSERT INTO test_question (id_question, id_test) VALUES (2,1);
 INSERT INTO test_question (id_question, id_test) VALUES (3,1);
 INSERT INTO test_question (id_question, id_test) VALUES (4,1);
 INSERT INTO test_question (id_question, id_test) VALUES (5,1);
 
--- Chef de projet : Questions 6 → 10
 INSERT INTO test_question (id_question, id_test) VALUES (6,2);
 INSERT INTO test_question (id_question, id_test) VALUES (7,2);
 INSERT INTO test_question (id_question, id_test) VALUES (8,2);
 INSERT INTO test_question (id_question, id_test) VALUES (9,2);
 INSERT INTO test_question (id_question, id_test) VALUES (10,2);
 
--- Designer UX/UI : Questions 11 → 15
 INSERT INTO test_question (id_question, id_test) VALUES (11,3);
 INSERT INTO test_question (id_question, id_test) VALUES (12,3);
 INSERT INTO test_question (id_question, id_test) VALUES (13,3);
 INSERT INTO test_question (id_question, id_test) VALUES (14,3);
 INSERT INTO test_question (id_question, id_test) VALUES (15,3);
 
--- Analyste financier : Questions 16 → 20
 INSERT INTO test_question (id_question, id_test) VALUES (16,4);
 INSERT INTO test_question (id_question, id_test) VALUES (17,4);
 INSERT INTO test_question (id_question, id_test) VALUES (18,4);
 INSERT INTO test_question (id_question, id_test) VALUES (19,4);
 INSERT INTO test_question (id_question, id_test) VALUES (20,4);
 
--- Responsable marketing : Questions 21 → 25
 INSERT INTO test_question (id_question, id_test) VALUES (21,5);
 INSERT INTO test_question (id_question, id_test) VALUES (22,5);
 INSERT INTO test_question (id_question, id_test) VALUES (23,5);

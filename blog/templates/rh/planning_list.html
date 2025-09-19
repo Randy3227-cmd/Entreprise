@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Planning des entretiens</title>
+</head>
+<body>
+    <h1>Planning des entretiens</h1>
+
+    {% if plannings %}
+        <table border="1" cellpadding="8">
+            <tr>
+                {% comment %} <th>ID</th> {% endcomment %}
+                <th>Candidat</th>
+                <th>Date Entretien</th>
+                <th></th>
+            </tr>
+            {% for p in plannings %}
+            <tr>
+                {% comment %} <td>{{ p.id }}</td> {% endcomment %}
+                <td>{{ p.id_candidat.nom }} {{ p.id_candidat.prenom }}</td>
+                <td>{{ p.date_entretien|date:"d/m/Y" }}</td>
+                <td><a href="/rh/entretien/evaluation/{{ p.id }}"> Evaluer </a></td>
+            </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <p>Aucun entretien planifié.</p>
+    {% endif %}
+</body>
+</html>

@@ -11,6 +11,7 @@ from blog.views.rh.AnnonceListeRh import detail_annonceRh  # import depuis ton s
 from blog.views.rh.AnnonceListeRh import candidats_annonce  # import depuis ton sous-dossier
 from blog.views.rh.Accueil import *
 from blog.views.rh.qcm import *
+from blog.views.rh.Entretien import *
 from blog.views.rh.Recruter import recruter
 from blog.views.rh.ClassifierCV import classifier_cv
 
@@ -27,6 +28,9 @@ urlpatterns = [
     path('rh/annonce/<int:annonce_id>/candidats/', candidats_annonce, name='candidats_annonce'),
     path('candidat/test/<int:annonce_id>/<int:candidat_id>/', showQCM, name='showQCM'),
     path('candidat/test/score', score_test, name='score_test'),
+    path('rh/entretien/plannig', planning, name="planning"),
+    path('rh/entretien/evaluation/<int:planning_id>', evaluation, name="evaluation"),
+    path('rh/entretien/score/', evaluation_score, name="evaluation_score"),
     path('rh/recruter/<int:annonce_id>/', recruter, name='recruter'),
     path('candidat/cv/classifier/<int:annonce_id>/', classifier_cv, name='classifier_cv'),
 ]

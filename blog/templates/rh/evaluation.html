@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Entretien</title>
+</head>
+<body>
+    {% if candidat %}
+        <h1>Entretien de {{ candidat.nom }} {{ candidat.prenom }}</h1>
+
+        <h2>Détails du Candidat</h2>
+        <ul>
+            <li><strong>Nom :</strong> {{ candidat.nom }}</li>
+            <li><strong>Prénom :</strong> {{ candidat.prenom }}</li>
+            <li><strong>Email :</strong> {{ candidat.email }}</li>
+            <li><strong>Téléphone :</strong> {{ candidat.telephone }}</li>
+            <li><strong>Date de naissance :</strong> {{ candidat.date_naissance }}</li>
+            <li><strong>Adresse :</strong> {{ candidat.adresse }}</li>
+        </ul>
+
+        {{ planning.id_annonce.id }}
+
+        {% if cv %}
+            <h2>Détails du CV du candidat</h2>
+            <ul>
+                <li><strong>Titre :</strong> {{ cv.titre }}</li>
+                <li><strong>Résumé :</strong> {{ cv.resume }}</li>
+                <li><strong>Date de création :</strong> {{ cv.date_creation }}</li>
+                <li><strong>Statut :</strong> {{ cv.statut.description }}</li>
+                {% if cv.photo %}
+                    <li><strong>Photo :</strong><br>
+                        <img src="{{ cv.photo.url }}" alt="Photo CV" width="150">
+                    </li>
+                {% endif %}
+            </ul>
+        {% else %}
+            <p>Aucun CV disponible pour ce candidat et cette annonce.</p>
+        {% endif %}
+
+        <form method="post" action="/rh/entretien/score/">
+            {% csrf_token %}
+            <input type="hidden" name="candidat_id" value="{{ candidat.id }}">
+            <input type="hidden" name="planning_id" value="{{ planning.id }}">
+            <input type="hidden" name="annonce_id" value="{{ planning.id_annonce.id }}">
+
+            <input type="radio" name="score" value="-1" id="score_mauvais">
+            <label for="score_mauvais">Mauvais</label>
+            
+            <input type="radio" name="score" value="0" id="score_passable">
+            <label for="score_passable">Passable</label>
+            
+            <input type="radio" name="score" value="1" id="score_bien">
+            <label for="score_bien">Bien</label>
+            
+            <input type="radio" name="score" value="2" id="score_tres_bien">
+            <label for="score_tres_bien">Très Bien</label>
+            
+            <br><br>
+            <input type="submit" value="Valider">
+        </form>
+    {% endif %}
+</body>
+</html>
