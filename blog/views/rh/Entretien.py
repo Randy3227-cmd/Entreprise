@@ -92,7 +92,20 @@ def evaluation_score (request):
     cv.statut = StatutCV.objects.get(description='entretien reussi')
     cv.save()
 
-    plannings = PlanningEntretien.objects.select_related("id_candidat").all().order_by("date_entretien")
+    plannings = (
+        PlanningEntretien.objects
+        .select_related("id_candidat", "id_annonce")
+        .annotate(
+            has_score=Exists(
+                ScoreEntretien.objects.filter(
+                    id_candidat=OuterRef("id_candidat"),
+                    id_annonce=OuterRef("id_annonce")
+                )
+            )
+        )
+        .filter(has_score=False)  # seulement ceux sans note
+        .order_by("date_entretien")
+    )
 
     context = {
         "plannings": plannings
