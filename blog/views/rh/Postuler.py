@@ -58,6 +58,7 @@ def postuler(request, annonce_id):
             telephone=request.POST.get("telephone"),
             date_naissance=request.POST.get("date_naissance") or None,
             adresse=request.POST.get("adresse"),
+            CIN=request.POST.get("CIN"),
         )
 
         statut = get_object_or_404(StatutCV, id=1)
