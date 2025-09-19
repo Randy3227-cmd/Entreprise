@@ -9,6 +9,6 @@ INSERT INTO blog_statutcv (description) VALUES
 ('CV invalide'),
 ('CV valide'),
 ('Test valide'),
-('entretien reussi'),
-('recrute');
+('Entretien reussi'),
+('Recrute');
 

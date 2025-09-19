@@ -225,3 +225,4 @@ class TestQuestion(models.Model):
     class Meta:
         managed = False
         db_table = 'test_question'
+        

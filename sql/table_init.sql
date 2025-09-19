@@ -218,3 +218,9 @@ CREATE TABLE score_total (
     id_annonce INT NOT NULL REFERENCES blog_annonce(id),
     note INT
 );
+
+
+-- CREATE TABLE annonce_status (
+--     id SERIAL PRIMARY KEY,
+--     status BOOLEAN
+-- );
