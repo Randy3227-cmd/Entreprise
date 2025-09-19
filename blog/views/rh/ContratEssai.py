@@ -2,14 +2,15 @@ from django.http import HttpResponse
 from reportlab.lib.pagesizes import A4
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
-from blog.models import Candidat, Annonce, CV
+from blog.models import Candidat, Annonce, CV, Employe
 import datetime
 
 
 def generer_contrat(request, annonce_id, cv_id):
     annonce = Annonce.objects.get(id=annonce_id)
     cv = CV.objects.get(id=cv_id)
-    candidat = cv.candidat  
+    candidat = cv.candidat
+    employe = Employe.objects.filter(candidat=candidat).first()  
 
     # Réponse HTTP
     response = HttpResponse(content_type='application/pdf')
@@ -39,7 +40,6 @@ def generer_contrat(request, annonce_id, cv_id):
     Monsieur <b>{candidat.nom} {candidat.prenom}</b>,<br/>
     Né le {candidat.date_naissance.strftime("%d/%m/%Y") if candidat.date_naissance else "____"},<br/>
     Résidant au {candidat.adresse if candidat.adresse else "____"},<br/>
-    Titulaire de la carte d’identité nationale n° ____________,<br/>
     appelé ci-après l’Employé.
     """
     elements.append(Paragraph(intro, style_normal))
@@ -51,7 +51,7 @@ def generer_contrat(request, annonce_id, cv_id):
     Durée de la période d’essai : 3 mois renouvelable une fois.<br/>
     Fonction : {annonce.role}<br/>
     Position : Cadre<br/>
-    Rémunération brute : {annonce.salaire if annonce.salaire else "____"} MGA<br/>
+    Rémunération brute : {employe.salaire if employe and employe.salaire else "____"} MGA<br/>
     Lieu du poste : {annonce.lieu_de_poste if annonce.lieu_de_poste else "____"}<br/>
     """
     elements.append(Paragraph(infos, style_normal))
