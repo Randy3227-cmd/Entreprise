@@ -10,210 +10,293 @@
 
 <style>
     body { 
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; 
-        margin: 0; 
-        background: #f5f5f5; /* fond clair */
-        color: #333333;
+        font-family: "Segoe UI", sans-serif; 
+        background: #f5f5f5;
+        color: #333;
+        margin: 0;
     }
-    
+
     .content {
         margin-left: 260px;
-        padding: 3rem;
-        min-height: 100vh;
+        padding: 2rem;
+        max-width: 1600px; /* plus large */
     }
-    
-    h1 { 
-        font-size: 2rem;
-        font-weight: 400;
-        color: #222222;
-        margin-bottom: 3rem;
-        letter-spacing: -0.5px;
+
+    h1 {
+        margin-bottom: 2rem;
+        font-weight: 500;
     }
-    
+
+    /* Grille responsive : jusqu'à 3 colonnes */
     .candidates-grid {
         display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(450px, 1fr));
         gap: 2rem;
-        margin-bottom: 3rem;
     }
-    
+
     .candidate-card {
-        position: relative;
-        background: #ffffff; /* clair */
-        border: 1px solid #ddd; /* léger contraste */
-        padding: 2rem;
-        display: grid;
-        grid-template-columns: auto 1fr;
-        gap: 2rem;
-        align-items: start;
-        border-radius: 10px;
-        box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+        background: #fff;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 0;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+        display: flex;
+        flex-direction: column;
+        min-height: auto; 
+        width: 100%;
+        overflow: hidden;
     }
 
-    .recruit-button {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            padding: 0.5rem 1rem;
-            background: #1e3a8a;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: background 0.2s ease;
-            text-decoration: none;
-        }
+    /* En-tête du CV - style minimaliste */
+    .cv-header {
+        background: #fff;
+        color: #333;
+        padding: 2rem;
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+        border-bottom: 1px solid #e5e7eb;
+    }
 
-        .recruit-button:hover {
-            background: #162c6a;
-        }
-    
     .candidate-photo {
-        width: 100px;
-        height: 100px;
+        width: 80px;
+        height: 80px;
         border-radius: 50%;
         object-fit: cover;
-        border: 2px solid #ccc;
+        border: 1px solid #d1d5db;
+        flex-shrink: 0;
     }
-    
+
     .candidate-photo-placeholder {
-        width: 100px;
-        height: 100px;
+        width: 80px;
+        height: 80px;
         border-radius: 50%;
-        background: #e0e0e0;
+        background: #f9fafb;
         display: flex;
         align-items: center;
         justify-content: center;
-        color: #888888;
-        font-size: 2rem;
+        color: #6b7280;
+        font-size: 1.5rem;
+        font-weight: 500;
+        border: 1px solid #d1d5db;
+        flex-shrink: 0;
     }
-    
+
     .candidate-info {
         flex: 1;
     }
-    
-    .candidate-header {
-        margin-bottom: 1.5rem;
-    }
-    
+
     .candidate-name {
-        font-size: 1.5rem;
-        font-weight: 500;
-        color: #222222;
-        margin-bottom: 0.25rem;
+        font-size: 1.6rem;
+        font-weight: 600;
+        margin-bottom: 0.3rem;
+        color: #111827;
     }
-    
+
     .candidate-title {
-        color: #555555;
         font-size: 1rem;
-        margin-bottom: 0.5rem;
+        color: #6b7280;
     }
-    
-    .candidate-resume {
-        color: #444444;
-        line-height: 1.5;
+
+    /* Corps du CV */
+    .cv-body {
+        padding: 2rem;
+        flex: 1;
     }
-    
-    .skills-section {
+
+    /* Disposition en deux colonnes */
+    .cv-content {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        grid-template-columns: 1fr 1fr;
+        gap: 2rem;
+    }
+
+    .cv-left, .cv-right {
+        display: flex;
+        flex-direction: column;
         gap: 1.5rem;
-        margin-top: 2rem;
     }
-    
-    .skill-group {
-        background: #f8f8f8;
-        border: 1px solid #ddd;
-        padding: 1rem;
-        border-radius: 5px;
+
+    /* Contact et infos personnelles - minimaliste */
+    .contact-section {
+        background: #fff;
+        padding: 1.5rem;
+        border: 1px solid #e5e7eb;
+        border-radius: 2px;
     }
-    
-    .skill-group-title {
-        color: #1e3a8a;
+
+    .contact-section h3 {
+        color: #374151;
         font-size: 0.9rem;
+        font-weight: 600;
         text-transform: uppercase;
+        margin-bottom: 1rem;
         letter-spacing: 0.5px;
-        margin-bottom: 0.75rem;
+    }
+
+    .contact-item {
+        display: flex;
+        align-items: center;
+        margin-bottom: 0.5rem;
+        font-size: 0.85rem;
+    }
+
+    .contact-item strong {
+        min-width: 70px;
+        color: #6b7280;
         font-weight: 500;
     }
-    
-    .skill-item {
-        color: #555555;
-        font-size: 0.85rem;
-        margin-bottom: 0.5rem;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
+
+    /* Résumé professionnel minimaliste */
+    .resume-section {
+        grid-column: 1 / -1;
+        background: #fff;
+        border: 1px solid #e5e7eb;
+        border-radius: 2px;
+        padding: 1.5rem;
     }
-    
-    .skill-item:last-child {
+
+    .resume-section h3 {
+        color: #374151;
+        font-size: 0.9rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        margin-bottom: 1rem;
+        letter-spacing: 0.5px;
+        border-bottom: 1px solid #e5e7eb;
+        padding-bottom: 0.5rem;
+    }
+
+    .resume-text {
+        font-size: 0.9rem;
+        line-height: 1.6;
+        color: #4b5563;
+    }
+
+    /* Sections standards minimalistes */
+    .cv-section {
+        background: #fff;
+        border: 1px solid #e5e7eb;
+        border-radius: 2px;
+        padding: 1.5rem;
+    }
+
+    .cv-section h3 {
+        color: #374151;
+        font-size: 0.9rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        margin-bottom: 1rem;
+        letter-spacing: 0.5px;
+        border-bottom: 1px solid #e5e7eb;
+        padding-bottom: 0.5rem;
+    }
+
+    .cv-section p {
+        margin: 0.5rem 0;
+        font-size: 0.85rem;
+        line-height: 1.5;
+        color: #4b5563;
+    }
+
+    .formation-item {
+        margin-bottom: 0.8rem;
+        padding-left: 1rem;
+        border-left: 1px solid #d1d5db;
+    }
+
+    .formation-item:last-child {
         margin-bottom: 0;
     }
-    
-    .skill-level {
-        color: #888888;
-        font-size: 0.75rem;
+
+    /* Compétences et langues style minimaliste */
+    .skills-container, .languages-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.4rem;
     }
-    
-    .skill-duration {
-        color: #999999;
-        font-size: 0.75rem;
-    }
-    
-    .empty-state {
-        text-align: center;
-        padding: 4rem 2rem;
-        color: #666666;
-        background: #fafafa;
-        border: 1px solid #ddd;
-        border-radius: 10px;
-    }
-    
-    .empty-state h2 {
-        font-size: 1.5rem;
+
+    .skill-tag, .language-tag {
+        background: #f9fafb;
+        color: #374151;
+        border: 1px solid #d1d5db;
+        padding: 0.3rem 0.7rem;
+        border-radius: 3px;
+        font-size: 0.8rem;
         font-weight: 400;
-        margin-bottom: 0.5rem;
-        color: #444444;
     }
-    
+
+    /* Statut minimaliste */
+    .status-section {
+        background: #f9fafb;
+        border: 1px solid #d1d5db;
+        color: #374151;
+        text-align: center;
+        padding: 1rem;
+        border-radius: 2px;
+        font-weight: 500;
+        font-size: 0.85rem;
+    }
+
+    /* Bouton recruter minimaliste */
+    .recruit-button {
+        align-self: center;
+        margin-top: 1rem;
+        padding: 0.7rem 1.5rem;
+        background: #374151;
+        color: #fff;
+        border: none;
+        border-radius: 2px;
+        cursor: pointer;
+        text-decoration: none;
+        font-size: 0.85rem;
+        font-weight: 500;
+        transition: background-color 0.2s ease;
+    }
+
+    .recruit-button:hover {
+        background: #111827;
+    }
+
     .back-link {
         display: inline-block;
-        padding: 1rem 2rem;
+        padding: 0.7rem 1.5rem;
         background: #ffffff;
-        color: #1e3a8a;
+        color: #374151;
         text-decoration: none;
-        border: 2px solid #1e3a8a;
+        border: 1px solid #d1d5db;
         transition: all 0.2s ease;
         margin-top: 2rem;
-        border-radius: 5px;
+        border-radius: 2px;
+        font-size: 0.9rem;
     }
-    
+
     .back-link:hover {
-        background: #1e3a8a;
-        color: #ffffff;
+        background: #f9fafb;
+        color: #111827;
+        border-color: #9ca3af;
     }
-    
+
     @media (max-width: 768px) {
-        .content {
-            margin-left: 0;
-            padding: 1.5rem;
-        }
-        
-        h1 {
-            font-size: 1.5rem;
-        }
-        
-        .candidate-card {
+        .cv-content {
             grid-template-columns: 1fr;
-            gap: 1rem;
-            padding: 1.5rem;
+        }
+        
+        .cv-header {
+            flex-direction: column;
             text-align: center;
         }
-        
-        .skills-section {
-            grid-template-columns: 1fr;
-            gap: 1rem;
+    }
+
+    @media print {
+        body { background: #fff; }
+        .content { margin: 0; padding: 0; }
+        .candidate-card {
+            box-shadow: none;
+            border: none;
+            page-break-inside: avoid;
         }
+        .back-link, .recruit-button, #classify-btn { display: none; }
     }
 </style>
 </head>
@@ -237,24 +320,13 @@
             Classification des CV
         </button>
     </a>
+
     {% if cvs %}
         <div class="candidates-grid">
         {% for cv in cvs %}
             <div class="candidate-card">
-                {% if not statut %}
-                {% if cv.statut.description != "Recrute" %}
-                    <button type="button" class="recruit-button"
-                            data-bs-toggle="modal"
-                            data-bs-target="#recruterModal"
-                            data-candidat-id="{{ cv.candidat.id }}"
-                            data-candidat-nom="{{ cv.candidat.prenom }} {{ cv.candidat.nom }}">
-                        Recruter
-                    </button>
-                {% endif %}
-                {% endif %}
-
-
-                <div>
+                <!-- En-tête professionnel -->
+                <div class="cv-header">
                     {% if cv.photo %}
                         <img src="{{ cv.photo.url }}" alt="Photo de {{ cv.candidat.nom }}" class="candidate-photo">
                     {% else %}
@@ -262,90 +334,124 @@
                             {{ cv.candidat.prenom.0 }}{{ cv.candidat.nom.0 }}
                         </div>
                     {% endif %}
-                </div>
-                
-                <div class="candidate-info">
-                    <div class="candidate-header">
+                    <div class="candidate-info">
                         <div class="candidate-name">{{ cv.candidat.prenom }} {{ cv.candidat.nom }}</div>
                         <div class="candidate-title">{{ cv.titre }}</div>
-                        {% if cv.resume %}
-                            <div class="candidate-resume">{{ cv.resume }}</div>
-                        {% endif %}
-                    </div>
-                    
-                    <div class="skills-section">
-                        <div class="skill-group">
-                            <div class="skill-group-title">Formations</div>
-                            {% for f in cv.formations.all %}
-                                <div class="skill-item">
-                                    <span>{{ f.formation }}</span>
-                                </div>
-                                {% if f.etablissement %}
-                                    <div class="skill-duration">{{ f.etablissement }}</div>
-                                {% endif %}
-                                {% if f.date_debut or f.date_fin %}
-                                    <div class="skill-duration">{{ f.date_debut|default:"?" }} → {{ f.date_fin|default:"?" }}</div>
-                                {% endif %}
-                            {% empty %}
-                                <div class="skill-item" style="color: #999999;">Aucune formation</div>
-                            {% endfor %}
-                        </div>
-
-                        <div class="skill-group">
-                            <div class="skill-group-title">Compétences</div>
-                            {% for c in cv.competences.all %}
-                                <div class="skill-item">
-                                    <span>{{ c.competence }}</span>
-                                    {% if c.niveau %}<span class="skill-level">{{ c.niveau }}</span>{% endif %}
-                                </div>
-                            {% empty %}
-                                <div class="skill-item" style="color: #999999;">Aucune compétence</div>
-                            {% endfor %}
-                        </div>
-
-                        <div class="skill-group">
-                            <div class="skill-group-title">Langues</div>
-                            {% for l in cv.langues.all %}
-                                <div class="skill-item">
-                                    <span>{{ l.langue }}</span>
-                                    {% if l.niveau %}<span class="skill-level">{{ l.niveau }}</span>{% endif %}
-                                </div>
-                            {% empty %}
-                                <div class="skill-item" style="color: #999999;">Aucune langue</div>
-                            {% endfor %}
-                        </div>
-
-                        <div class="skill-group">
-                            <div class="skill-group-title">Loisirs</div>
-                            {% for lo in cv.loisirs.all %}
-                                <div class="skill-item">
-                                    <span>{{ lo.loisir }}</span>
-                                </div>
-                            {% empty %}
-                                <div class="skill-item" style="color: #999999;">Aucun loisir</div>
-                            {% endfor %}
-                        </div>
-                        <div class="skill-group">
-                            <div class="skill-group-title">Status</div>
-                                <div class="skill-item">
-                                    <span>{{ cv.statut }}</span>
-                                </div>
-                        </div>
                     </div>
                 </div>
+
+                <div class="cv-body">
+                    <!-- Résumé professionnel en pleine largeur -->
+                    {% if cv.resume %}
+                        <div class="resume-section">
+                            <h3>Profil Professionnel</h3>
+                            <div class="resume-text">{{ cv.resume }}</div>
+                        </div>
+                    {% endif %}
+
+                    <!-- Contenu en deux colonnes -->
+                    <div class="cv-content">
+                        <!-- Colonne gauche -->
+                        <div class="cv-left">
+                            <!-- Contact -->
+                            <div class="contact-section">
+                                <h3>Contact</h3>
+                                <div class="contact-item">
+                                    <strong>Email:</strong> {{ cv.candidat.email }}
+                                </div>
+                                <div class="contact-item">
+                                    <strong>Tél:</strong> {{ cv.candidat.telephone|default:"-" }}
+                                </div>
+                                <div class="contact-item">
+                                    <strong>Né(e) le:</strong> {{ cv.candidat.date_naissance|date:"d/m/Y"|default:"-" }}
+                                </div>
+                                <div class="contact-item">
+                                    <strong>Adresse:</strong> {{ cv.candidat.adresse|default:"-" }}
+                                </div>
+                            </div>
+
+                            <!-- Compétences -->
+                            <div class="cv-section">
+                                <h3>Compétences</h3>
+                                <div class="skills-container">
+                                    {% for c in cv.competences.all %}
+                                        <span class="skill-tag">{{ c.competence }}{% if c.niveau %} ({{ c.niveau }}){% endif %}</span>
+                                    {% empty %}
+                                        <p>Aucune compétence renseignée.</p>
+                                    {% endfor %}
+                                </div>
+                            </div>
+
+                            <!-- Langues -->
+                            <div class="cv-section">
+                                <h3>Langues</h3>
+                                <div class="languages-container">
+                                    {% for l in cv.langues.all %}
+                                        <span class="language-tag">{{ l.langue }}{% if l.niveau %} ({{ l.niveau }}){% endif %}</span>
+                                    {% empty %}
+                                        <p>Aucune langue renseignée.</p>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Colonne droite -->
+                        <div class="cv-right">
+                            <!-- Formation -->
+                            <div class="cv-section">
+                                <h3>Formation</h3>
+                                {% for f in cv.formations.all %}
+                                    <div class="formation-item">
+                                        <strong>{{ f.formation }}</strong><br>
+                                        <em>{{ f.etablissement }}</em><br>
+                                        <small>{{ f.date_debut|default:"?" }} → {{ f.date_fin|default:"?" }}</small>
+                                    </div>
+                                {% empty %}
+                                    <p>Aucune formation renseignée.</p>
+                                {% endfor %}
+                            </div>
+
+                            <!-- Loisirs -->
+                            <div class="cv-section">
+                                <h3>Centres d'intérêt</h3>
+                                <p>
+                                    {% for lo in cv.loisirs.all %}
+                                        {{ lo.loisir }}{% if not forloop.last %}, {% endif %}
+                                    {% empty %}
+                                        Aucun loisir mentionné.
+                                    {% endfor %}
+                                </p>
+                            </div>
+
+                            <!-- Statut -->
+                            <div class="status-section">
+                                {{ cv.statut }}
+                            </div>
+                        </div>
+                    </div>
+
+                    {% if not statut and cv.statut.description != "Recrute" %}
+                        <button type="button" class="recruit-button"
+                                data-bs-toggle="modal"
+                                data-bs-target="#recruterModal"
+                                data-candidat-id="{{ cv.candidat.id }}"
+                                data-candidat-nom="{{ cv.candidat.prenom }} {{ cv.candidat.nom }}">
+                            Recruter
+                        </button>
+                    {% endif %}
+                </div>
             </div>
+
         {% endfor %}
         </div>
     {% else %}
-        <div class="empty-state">
-            <h2>Aucun candidat</h2>
-            <p>Aucune candidature n'a été reçue pour cette annonce.</p>
-        </div>
+        <div class="alert alert-secondary">Aucun candidat n'a été reçu pour cette annonce.</div>
     {% endif %}
 
     <a href="{% url 'detail_annonceRh' annonce.id %}" class="back-link">← Retour à l'annonce</a>
 </div>
 
+<!-- Modal Recruter -->
 <div class="modal fade" id="recruterModal" tabindex="-1" aria-labelledby="recruterModalLabel" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
@@ -371,21 +477,21 @@
           </form>
         </div>
       </div>
-    </div>
+</div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        // Injecter les infos du candidat dans le modal
-        let recruterModal = document.getElementById('recruterModal');
-        recruterModal.addEventListener('show.bs.modal', function (event) {
-            let button = event.relatedTarget;
-            let candidatId = button.getAttribute('data-candidat-id');
-            let candidatNom = button.getAttribute('data-candidat-nom');
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // Injecter les infos du candidat dans le modal
+    let recruterModal = document.getElementById('recruterModal');
+    recruterModal.addEventListener('show.bs.modal', function (event) {
+        let button = event.relatedTarget;
+        let candidatId = button.getAttribute('data-candidat-id');
+        let candidatNom = button.getAttribute('data-candidat-nom');
 
-            document.getElementById('candidatId').value = candidatId;
-            document.getElementById('candidatNom').textContent = "Candidat : " + candidatNom;
-        });
-    </script>
+        document.getElementById('candidatId').value = candidatId;
+        document.getElementById('candidatNom').textContent = "Candidat : " + candidatNom;
+    });
+</script>
 
 </body>
 </html>

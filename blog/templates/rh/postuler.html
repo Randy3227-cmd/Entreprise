@@ -1,4 +1,5 @@
 {% load static %}
+{% include 'rh/candidat_sidebar.html' %}
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -13,211 +14,506 @@
 /* --- Reset de base --- */
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: #eaeaea;
-    color: #222;
+    font-family: "Segoe UI", sans-serif;
+    background: #f5f5f5;
+    color: #333;
     line-height: 1.6;
+    margin: 0;
+    padding: 0;
+}
+
+.main-content {
+    margin-left: 260px;
+    padding: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+}
+
+/* --- Container A4 --- */
+.container {
+    max-width: 210mm;
+    min-height: 297mm;
+    margin: 0 auto;
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 2px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    padding: 0;
+    overflow: hidden;
+}
+
+/* --- En-tête du CV --- */
+.cv-header {
+    background: #fff;
+    padding: 2rem;
+    border-bottom: 1px solid #e5e7eb;
+    display: flex;
+    align-items: flex-start;
+    gap: 2rem;
+}
+
+.photo-section {
+    width: 120px;
+    flex-shrink: 0;
+}
+
+.photo-upload {
+    width: 120px;
+    height: 120px;
+    border: 2px dashed #d1d5db;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f9fafb;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.photo-upload:hover {
+    border-color: #9ca3af;
+    background: #f3f4f6;
+}
+
+.photo-upload input[type="file"] {
+    position: absolute;
+    opacity: 0;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+}
+
+.photo-placeholder {
+    text-align: center;
+    color: #6b7280;
+    font-size: 0.8rem;
+}
+
+.photo-preview {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: none;
+}
+
+.personal-info {
+    flex: 1;
+}
+
+.job-title-section {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 2px;
+}
+
+.job-title {
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: #111827;
+    margin-bottom: 0.5rem;
+}
+
+.candidature-title {
+    font-size: 1rem;
+    color: #6b7280;
+}
+
+/* --- Corps du formulaire --- */
+.cv-body {
     padding: 2rem;
 }
 
-/* --- Container principal --- */
-.container {
-    max-width: 850px;
-    margin: 0 auto;
-    background: #fff;
-    border-radius: 12px;
-    box-shadow: 0 8px 30px rgba(0,0,0,0.08);
-    padding: 2.5rem 3rem;
-}
-
-/* --- Titres --- */
-h1 {
-    text-align: center;
-    font-size: 2rem;
-    margin-bottom: 2rem;
-    color: #111;
-    font-weight: 600;
-}
-.job-info {
-    text-align: center;
-    margin-bottom: 2rem;
-}
-.job-title {
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: #111;
-}
-
-/* --- Formulaire --- */
-form { display: flex; flex-direction: column; gap: 2rem; }
-
-fieldset {
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    padding: 1.8rem 2rem;
-    background: #fafafa;
-}
-legend {
-    font-weight: 600;
-    font-size: 1.1rem;
-    color: #111;
-    padding: 0 0.5rem;
-}
-
-/* --- Labels & Inputs --- */
-label {
-    display: block;
-    margin-bottom: 0.4rem;
-    font-size: 0.95rem;
-    color: #333;
-}
-input[type="text"], input[type="email"], input[type="date"], input[type="file"], select, textarea {
-    width: 100%;
-    padding: 0.7rem 0.9rem;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    font-size: 0.95rem;
-    color: #222;
-    background: #fff;
-    transition: 0.2s;
-}
-input:focus, select:focus, textarea:focus {
-    border-color: #555;
-    outline: none;
-    background: #fff;
-}
-textarea { min-height: 120px; resize: vertical; }
-
-/* --- Bouton --- */
-button {
-    background: #111;
-    color: #fff;
-    padding: 1rem 2rem;
-    font-size: 1.1rem;
-    font-weight: 600;
-    border-radius: 8px;
-    border: none;
-    cursor: pointer;
-    transition: all 0.2s;
-    align-self: center;
-}
-button:hover {
-    background: #fff;
-    color: #111;
-    border: 1px solid #111;
-}
-
-/* --- Select2 --- */
-.select2-container--default .select2-selection--multiple {
-    background: #fff;
-    border: 1px solid #ccc;
-    min-height: 42px;
-    border-radius: 6px;
-}
-.select2-container--default .select2-selection--multiple .select2-selection__choice {
-    background: #e6e6e6;
-    color: #222;
-    border: none;
-    border-radius: 4px;
-    padding: 0 5px;
-    margin-top: 4px;
-}
-.select2-container--default .select2-selection--multiple .select2-selection__choice__remove {
-    color: #888;
-    font-weight: normal;
-    margin-right: 3px;
-}
-.select2-container--default .select2-selection--multiple .select2-selection__choice__remove:hover {
-    color: #111;
-}
-.select2-dropdown { background: #fff; border: 1px solid #ccc; }
-.select2-container--default .select2-results__option { color: #222; }
-.select2-container--default .select2-results__option--highlighted { background: #eee; }
-.select2-container--default .select2-search--inline .select2-search__field { color: #222; }
-
-/* --- Extra container pour champs dynamiques --- */
-.extra-container {
-    margin-top: 1rem;
-    background: #f9f9f9;
-    padding: 1rem;
-    border-radius: 6px;
-    display: none;
-}
-.subfields {
+/* --- Champs de base --- */
+.form-row {
     display: grid;
     grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 1.2rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group.full-width {
+    grid-column: 1 / -1;
+}
+
+label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+input[type="text"], input[type="email"], input[type="date"], select, textarea {
+    padding: 0.7rem;
+    border: 1px solid #d1d5db;
+    border-radius: 2px;
+    font-size: 0.9rem;
+    color: #374151;
+    background: #fff;
+    transition: border-color 0.2s ease;
+}
+
+input:focus, select:focus, textarea:focus {
+    border-color: #9ca3af;
+    outline: none;
+}
+
+textarea {
+    min-height: 100px;
+    resize: vertical;
+    font-family: inherit;
+}
+
+/* --- Sections du CV --- */
+.cv-sections {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+.cv-left, .cv-right {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+}
+
+.cv-section {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 2px;
+    padding: 1.5rem;
+}
+
+.cv-section h3 {
+    color: #374151;
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+    letter-spacing: 0.5px;
+    border-bottom: 1px solid #e5e7eb;
+    padding-bottom: 0.5rem;
+}
+
+/* --- Select2 personnalisé --- */
+.select2-container {
+    width: 100% !important;
+}
+
+.select2-container--default .select2-selection--multiple {
+    background: #fff;
+    border: 1px solid #d1d5db;
+    min-height: 42px;
+    border-radius: 2px;
+    padding: 0.3rem;
+    width: 100%;
+}
+
+.select2-container--default .select2-selection--multiple .select2-selection__choice {
+    background: #f9fafb;
+    color: #374151;
+    border: 1px solid #d1d5db;
+    border-radius: 3px;
+    padding: 0.2rem 0.6rem;
+    margin: 0.2rem;
+    font-size: 0.8rem;
+}
+
+.select2-container--default .select2-selection--multiple .select2-selection__choice__remove {
+    color: #6b7280;
+    margin-right: 0.3rem;
+}
+
+.select2-container--default .select2-selection--multiple .select2-selection__choice__remove:hover {
+    color: #374151;
+}
+
+.select2-dropdown {
+    background: #fff;
+    border: 1px solid #d1d5db;
+    border-radius: 2px;
+}
+
+.select2-container--default .select2-results__option {
+    color: #374151;
+    font-size: 0.9rem;
+}
+
+.select2-container--default .select2-results__option--highlighted {
+    background: #f3f4f6;
+}
+
+.select2-container--default .select2-search--inline .select2-search__field {
+    min-height: 1.5rem;
+}
+
+/* --- Champs dynamiques --- */
+.extra-container {
+    margin-top: 1rem;
+    display: none;
+}
+
+.skill-item {
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 3px;
+    padding: 1rem;
+    margin-bottom: 0.8rem;
+}
+
+.skill-item:last-child {
+    margin-bottom: 0;
+}
+
+.skill-item-header {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 0.8rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.skill-item input[type="text"],
+.skill-item input[type="date"] {
+    margin-top: 0.5rem;
+}
+
+.subfields {
+    display: grid;
+    grid-template-columns: 1fr;
     gap: 1rem;
     margin-top: 0.5rem;
 }
 
+.date-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+.field-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.field-group label {
+    font-size: 0.75rem;
+    color: #6b7280;
+    margin-bottom: 0.3rem;
+    text-transform: none;
+    letter-spacing: 0;
+    font-weight: 500;
+}
+
+.field-group input {
+    padding: 0.6rem;
+    font-size: 0.85rem;
+    border: 1px solid #d1d5db;
+    border-radius: 2px;
+}
+
+/* --- Bouton de soumission --- */
+.submit-section {
+    text-align: center;
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid #e5e7eb;
+}
+
+button {
+    background: #374151;
+    color: #fff;
+    padding: 0.8rem 2rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+    border-radius: 2px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+button:hover {
+    background: #111827;
+}
 
 /* --- Responsive --- */
-@media (max-width: 768px) { .subfields { grid-template-columns: 1fr; } }
+@media (max-width: 768px) {
+    .main-content {
+        margin-left: 0;
+        padding: 1rem;
+    }
+    .container { max-width: 100%; min-height: auto; }
+    .cv-header { flex-direction: column; text-align: center; }
+    .form-row, .cv-sections { grid-template-columns: 1fr; }
+    .subfields { grid-template-columns: 1fr; }
+    .date-row { grid-template-columns: 1fr; }
+}
 
+@media print {
+    body { background: #fff; padding: 0; }
+    .container { box-shadow: none; border: none; max-width: none; }
+}
 </style>
 </head>
 <body>
 
-<div class="container">
-    <h1>Candidature</h1>
-
-    <div class="job-info">
-        <div class="job-title">{{ annonce.role }}</div>
+<div class="main-content">
+    <div class="container">
+    <!-- En-tête avec photo et info de base -->
+    <div class="cv-header">
+        <div class="photo-section">
+            <div class="photo-upload">
+                <input type="file" name="photo" accept="image/*" id="photo-input">
+                <img class="photo-preview" id="photo-preview" alt="Preview">
+                <div class="photo-placeholder" id="photo-placeholder">
+                    <div style="font-size: 2rem; margin-bottom: 0.5rem;">📷</div>
+                    <div>Photo</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="personal-info">
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Prénom</label>
+                    <input type="text" name="prenom" placeholder="Jean" required>
+                </div>
+                <div class="form-group">
+                    <label>Nom</label>
+                    <input type="text" name="nom" placeholder="Dupont" required>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" name="email" placeholder="exemple@mail.com" required>
+                </div>
+                <div class="form-group">
+                    <label>Téléphone</label>
+                    <input type="text" name="telephone" placeholder="+261 34 12 345 67">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Date de naissance</label>
+                    <input type="date" name="date_naissance">
+                </div>
+                <div class="form-group">
+                    <label>CIN</label>
+                    <input type="text" name="CIN" placeholder="Ex: 101 123 456 789">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group full-width">
+                    <label>Adresse</label>
+                    <input type="text" name="adresse" placeholder="Rue, ville, pays">
+                </div>
+            </div>
+        </div>
     </div>
 
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
 
-        <!-- Informations personnelles -->
-        <fieldset>
-            <legend>Informations personnelles</legend>
-            <label>Nom :</label>
-            <input type="text" name="nom" placeholder="Ex: Dupont" required>
-            <label>Prénom :</label>
-            <input type="text" name="prenom" placeholder="Ex: Jean" required>
-            <label>Email :</label>
-            <input type="email" name="email" placeholder="exemple@mail.com" required>
-            <label>Téléphone :</label>
-            <input type="text" name="telephone" placeholder="Ex: +261 34 12 345 67">
-            <label>Date de naissance :</label>
-            <input type="date" name="date_naissance">
-            <label>Adresse :</label>
-            <input type="text" name="adresse" placeholder="Rue, ville, pays">
-        </fieldset>
+        <div class="cv-body">
+            <!-- Info sur le poste -->
+            <div class="job-title-section">
+                <div class="job-title">{{ annonce.role }}</div>
+                <div class="candidature-title">Candidature pour ce poste</div>
+            </div>
 
-        <!-- Profil professionnel -->
-        <fieldset>
-            <legend>Profil professionnel</legend>
-            <label>Titre du CV :</label>
-            <input type="text" name="titre" placeholder="Ex: Développeur Full-Stack passionné" required>
-            <label>Résumé professionnel :</label>
-            <textarea name="resume" placeholder="Présentez-vous en quelques lignes..."></textarea>
-            <label>Photo de profil :</label>
-            <input type="file" name="photo" accept="image/*">
-        </fieldset>
+            <!-- Titre et résumé -->
+            <div class="form-row">
+                <div class="form-group full-width">
+                    <label>Titre du CV</label>
+                    <input type="text" name="titre" placeholder="Développeur Full-Stack passionné" required>
+                </div>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group full-width">
+                    <label>Profil Professionnel</label>
+                    <textarea name="resume" placeholder="Présentez-vous en quelques lignes..."></textarea>
+                </div>
+            </div>
 
-        <!-- Champs dynamiques -->
-        {% for field, items in champs %}
-        <fieldset>
-            <legend>{{ field|capfirst }}</legend>
-            <select class="multi-select" id="{{ field }}-select" name="{{ field }}_ids[]" multiple="multiple">
-                {% for item in items %}<option value="{{ item.id }}">{{ item }}</option>{% endfor %}
-            </select>
-            <div id="{{ field }}-extra" class="extra-container"></div>
-        </fieldset>
-        {% endfor %}
+            <!-- Sections du CV en deux colonnes -->
+            <div class="cv-sections">
+                <!-- Colonne gauche -->
+                <div class="cv-left">
+                    {% for field, items in champs %}
+                        {% if field == "competences" or field == "langues" %}
+                        <div class="cv-section">
+                            <h3>{{ field|capfirst }}</h3>
+                            <select class="multi-select" id="{{ field }}-select" name="{{ field }}_ids[]" multiple="multiple">
+                                {% for item in items %}<option value="{{ item.id }}">{{ item }}</option>{% endfor %}
+                            </select>
+                            <div id="{{ field }}-extra" class="extra-container"></div>
+                        </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
 
-        <!-- Bouton envoyer -->
-        <button type="submit">Envoyer ma candidature</button>
+                <!-- Colonne droite -->
+                <div class="cv-right">
+                    {% for field, items in champs %}
+                        {% if field == "formations" or field == "loisirs" %}
+                        <div class="cv-section">
+                            <h3>{{ field|capfirst }}</h3>
+                            <select class="multi-select" id="{{ field }}-select" name="{{ field }}_ids[]" multiple="multiple">
+                                {% for item in items %}<option value="{{ item.id }}">{{ item }}</option>{% endfor %}
+                            </select>
+                            <div id="{{ field }}-extra" class="extra-container"></div>
+                        </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Bouton de soumission -->
+            <div class="submit-section">
+                <button type="submit">Envoyer ma candidature</button>
+            </div>
+        </div>
     </form>
 </div>
 
 <script>
+// Preview de la photo
+document.getElementById('photo-input').addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            document.getElementById('photo-preview').src = e.target.result;
+            document.getElementById('photo-preview').style.display = 'block';
+            document.getElementById('photo-placeholder').style.display = 'none';
+        };
+        reader.readAsDataURL(file);
+    }
+});
+
 $(document).ready(function() {
     {% for field, items in champs %}
     $('#{{ field }}-select').select2({
         tags: true,
-        placeholder: "Sélectionnez ou ajoutez..."
+        placeholder: "Sélectionnez ou ajoutez...",
+        width: '100%'
     }).on('change', function() {
         const selected = $(this).val() || [];
         const container = $('#{{ field }}-extra');
@@ -228,15 +524,39 @@ $(document).ready(function() {
             let text = $('#{{ field }}-select option[value="'+id+'"]').text() || id;
             let extra = "";
             if ("{{ field }}" === "competences" || "{{ field }}" === "langues") {
-                extra = `<input type="text" name="niveau_{{ field }}_${id}" placeholder="Niveau (Débutant, Intermédiaire, Expert)">`;
+                extra = `<div class="skill-item">
+                            <div class="skill-item-header">${text}</div>
+                            <div class="field-group">
+                                <label>Niveau</label>
+                                <input type="text" name="niveau_{{ field }}_${id}" placeholder="Débutant, Intermédiaire, Expert...">
+                            </div>
+                         </div>`;
             } else if ("{{ field }}" === "formations") {
-                extra = `<div class="subfields">
-                            Début : <input type="date" name="date_debut_${id}" placeholder="Date début">
-                            Fin : <input type="date" name="date_fin_${id}" placeholder="Date fin">
-                            Etablissement : <input type="text" name="etablissement_${id}" placeholder="École/Université">
+                extra = `<div class="skill-item">
+                            <div class="skill-item-header">${text}</div>
+                            <div class="subfields">
+                                <div class="date-row">
+                                    <div class="field-group">
+                                        <label>Date début</label>
+                                        <input type="date" name="date_debut_${id}">
+                                    </div>
+                                    <div class="field-group">
+                                        <label>Date fin</label>
+                                        <input type="date" name="date_fin_${id}">
+                                    </div>
+                                </div>
+                                <div class="field-group">
+                                    <label>Établissement</label>
+                                    <input type="text" name="etablissement_${id}" placeholder="École/Université">
+                                </div>
+                            </div>
+                         </div>`;
+            } else {
+                extra = `<div class="skill-item">
+                            <div class="skill-item-header">${text}</div>
                          </div>`;
             }
-            container.append(`<label>${text}</label>${extra}`);
+            container.append(extra);
         });
     });
     {% endfor %}
