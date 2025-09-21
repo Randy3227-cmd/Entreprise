@@ -220,7 +220,7 @@ CREATE TABLE score_total (
 );
 
 
--- CREATE TABLE annonce_status (
---     id SERIAL PRIMARY KEY,
---     status BOOLEAN
--- );
+ CREATE TABLE annonce_status (
+    id_annonce SERIAL PRIMARY KEY,
+    status BOOLEAN
+);

@@ -16,6 +16,7 @@ def creer_annonce(request):
     if request.method == "POST":
         # Données principales
         role = request.POST.get("role")
+        age = request.POST.get("age")
         salaire = request.POST.get("salaire") or None
         horaire = request.POST.get("horaire_de_travail") or None
         lieu = request.POST.get("lieu_de_poste")

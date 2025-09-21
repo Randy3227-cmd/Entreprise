@@ -69,3 +69,10 @@ class AnnonceStatus(models.Model):
     class Meta:
         managed = True
         db_table = 'annonce_status'
+
+# class AnnonceAge(models.Model):
+#     annonce = models.ForeignKey(Annonce, on_delete=models.CASCADE, db_column='id_annonce')
+#     age = models.IntegerField()
+
+#     def __str__(self):
+#         return f"{self.annonce} - {self.age}"
