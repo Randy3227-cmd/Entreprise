@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Liste des annonces</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        form { margin-bottom: 20px; display: flex; flex-wrap: wrap; gap: 10px; }
+        label { font-weight: bold; margin-right: 5px; }
+        input, select { padding: 5px; }
+        .annonce { border: 1px solid #ccc; padding: 10px; margin-bottom: 10px; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <h1>Liste des annonces</h1>
+
+    <!-- Formulaire des filtres -->
+    <form id="filter-form">
+        <label for="poste">Poste :</label>
+        <select name="poste" id="poste">
+            <option value="">-- Tous --</option>
+            {% for p in postes %}
+                <option value="{{ p.id }}">{{ p.nom }}</option>
+            {% endfor %}
+        </select>
+
+        <label for="salaire_min">Salaire min :</label>
+        <input type="number" name="salaire_min" id="salaire_min">
+
+        <label for="salaire_max">Salaire max :</label>
+        <input type="number" name="salaire_max" id="salaire_max">
+
+        <label for="lieu">Lieu :</label>
+        <input type="text" name="lieu" id="lieu">
+
+        <label for="horaire">Horaire :</label>
+        <input type="number" name="horaire" id="horaire">
+
+        <label for="date_limite">Date limite :</label>
+        <input type="date" name="date_limite" id="date_limite">
+    </form>
+
+    <hr>
+
+    <!-- Résultats dynamiques -->
+    <div id="annonce-results">
+        {% include "rh/annonce_results.html" %}
+    </div>
+
+    <script>
+    const form = document.getElementById("filter-form");
+
+    function applyFilters() {
+        let params = new URLSearchParams(new FormData(form)).toString();
+
+        fetch("/annonces/?" + params, {
+            headers: { "X-Requested-With": "XMLHttpRequest" }
+        })
+        .then(response => response.text())
+        .then(html => {
+            document.getElementById("annonce-results").innerHTML = html;
+        });
+    }
+
+    // Déclenche la recherche instantanément
+    form.querySelectorAll("input, select").forEach(el => {
+        el.addEventListener("input", applyFilters);
+        el.addEventListener("change", applyFilters);
+    });
+    </script>
+</body>
+</html>
