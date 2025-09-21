@@ -11,11 +11,3 @@ INSERT INTO blog_statutcv (description) VALUES
 ('Test valide'),
 ('Entretien reussi'),
 ('Recrute');
-
-INSERT INTO test_poste (id_test, id_poste) VALUES 
-(1, 1), 
-(2, 2),
-(3, 3), 
-(4, 4),
-(5, 5);
-

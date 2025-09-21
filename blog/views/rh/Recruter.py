@@ -3,6 +3,7 @@ from django.contrib import messages
 from blog.models.rh.Annonce import *
 from blog.models.rh.Candidat import * 
 from blog.models.rh.Employe import *
+from blog.models.rh.rh import AnnonceStatus
 from django.urls import reverse
 from django.http import JsonResponse
 
@@ -28,6 +29,10 @@ def recruter(request, annonce_id):
             cv.statut = StatutCV.objects.get(description='Recrute')
             cv.save()
 
+        # Mettre à jour le statut de l'annonce
+        annonceStatus = AnnonceStatus.objects.get(annonce=annonce)
+        annonceStatus.status = True
+        annonceStatus.save()
         # Créer l'embauche
         embauche = Embauche.objects.create(
             annonce=annonce,
@@ -37,7 +42,6 @@ def recruter(request, annonce_id):
 
         contrat_url = reverse("generer_contrat", args=[annonce.id, cv.id])
         redirect_url = reverse("candidats_annonce", args=[annonce.id])
-
         # Messages de succès
         messages.success(
             request, 

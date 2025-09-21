@@ -197,3 +197,11 @@ INSERT INTO test_question (id_question, id_test) VALUES (22,5);
 INSERT INTO test_question (id_question, id_test) VALUES (23,5);
 INSERT INTO test_question (id_question, id_test) VALUES (24,5);
 INSERT INTO test_question (id_question, id_test) VALUES (25,5);
+
+
+INSERT INTO test_poste (id_test, id_poste) VALUES 
+(1, 1), 
+(2, 2),
+(3, 3), 
+(4, 4),
+(5, 5);

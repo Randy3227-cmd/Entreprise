@@ -1,40 +1,117 @@
+{% load static %}
+{% include 'rh/candidat_sidebar.html' %}
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Test QCM - {{ test.test.nom }}</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: "Segoe UI", sans-serif;
+            background: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        .main-content {
+            margin-left: 260px;
+            padding: 2rem;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+        }
+        .container {
+            max-width: 800px;
+            width: 100%;
+            background: #fff;
+            border: 1px solid #e5e7eb;
+            border-radius: 4px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            padding: 2rem;
+        }
+        h1, h2, h3 {
+            margin-bottom: 1rem;
+            color: #111827;
+        }
+        h2 { font-size: 1.2rem; }
+        h3 { font-size: 1rem; color: #6b7280; margin-bottom: 2rem; }
+
+        form > div.question {
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            border: 1px solid #e5e7eb;
+            border-radius: 4px;
+            background: #f9fafb;
+        }
+        .question p {
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+        .question div.answer {
+            margin-bottom: 0.3rem;
+        }
+        input[type="radio"] {
+            margin-right: 0.5rem;
+        }
+        button {
+            background: #374151;
+            color: #fff;
+            padding: 0.8rem 2rem;
+            font-size: 0.9rem;
+            font-weight: 500;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+        button:hover {
+            background: #111827;
+        }
+
+        @media (max-width: 768px) {
+            .main-content { margin-left: 0; padding: 1rem; }
+        }
+    </style>
 </head>
 <body>
-    <h1>Test : {{ test.test.nom }}</h1>
-    <h2>Poste : {{ test.poste.nom }}</h2>
-    <h3>Annonce : {{ test.annonce.role }}</h3>
+    <div class="main-content">
+        <div class="container">
+            <h1>Test : {{ test.test.nom }}</h1>
+            <h2>Poste : {{ test.poste.nom }}</h2>
+            <h3>Annonce : {{ test.annonce.role }}</h3>
 
-    {% if test.questions %}
-        <form method="post" action="/candidat/test/score">
-            {% csrf_token %}
+            {% if test.questions %}
+                <form method="post" action="/candidat/test/score">
+                    {% csrf_token %}
+                    <input type="hidden" name="candidat_id" value="{{ test.candidat_id }}">
+                    <input type="hidden" name="annonce_id" value="{{ test.annonce.id }}">
 
-            <input type="hidden" name="candidat_id" value="{{ test.candidat_id }}">
-            <input type="hidden" name="annonce_id" value="{{ test.annonce.id }}">
-            
-            {% for question in test.questions %}
-                <div style="margin-bottom: 20px;">
-                    <p><strong>{{ forloop.counter }} :</strong> {{ question.texte }}</p>
-                    {% if question.reponses %}
-                        {% for reponse in question.reponses %}
-                            <div>
-                                <input type="radio" name="question_{{ question.id }}" value="{{ reponse.id }}" id="reponse_{{ reponse.id }}">
-                                <label for="reponse_{{ reponse.id }}">{{ reponse.texte }}</label>
-                            </div>
-                        {% endfor %}
-                    {% else %}
-                        <p><em>Aucune réponse disponible pour cette question.</em></p>
-                    {% endif %}
-                </div>
-            {% endfor %}
-            <button type="submit">Soumettre le test</button>
-        </form>
-    {% else %}
-        <p><em>Aucune question disponible pour ce test.</em></p>
-    {% endif %}
+                    {% for question in test.questions %}
+                        <div class="question">
+                            <p><strong>{{ forloop.counter }} :</strong> {{ question.texte }}</p>
+                            {% if question.reponses %}
+                                {% for reponse in question.reponses %}
+                                    <div class="answer">
+                                        <input type="radio" name="question_{{ question.id }}" value="{{ reponse.id }}" id="reponse_{{ reponse.id }}">
+                                        <label for="reponse_{{ reponse.id }}">{{ reponse.texte }}</label>
+                                    </div>
+                                {% endfor %}
+                            {% else %}
+                                <p><em>Aucune réponse disponible pour cette question.</em></p>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+
+                    <div style="text-align:center; margin-top:2rem;">
+                        <button type="submit">Soumettre le test</button>
+                    </div>
+                </form>
+            {% else %}
+                <p><em>Aucune question disponible pour ce test.</em></p>
+            {% endif %}
+        </div>
+    </div>
 </body>
 </html>

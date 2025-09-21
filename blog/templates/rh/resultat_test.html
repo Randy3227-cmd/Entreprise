@@ -1,63 +1,131 @@
+{% load static %}
+{% include 'rh/candidat_sidebar.html' %}
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Résultat du test</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Résultat du test - {{ poste.nom }}</title>
     <style>
-        body { font-family: Arial, sans-serif; margin: 20px; }
-        h2 { color: #2c3e50; }
-        .score { font-size: 18px; margin-bottom: 20px; }
-        .correct { color: green; font-weight: bold; }
-        .incorrect { color: red; font-weight: bold; }
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
-        th { background: #f4f4f4; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: "Segoe UI", sans-serif;
+            background: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        .main-content {
+            margin-left: 260px;
+            padding: 2rem;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+        }
+        .container {
+            max-width: 900px;
+            width: 100%;
+            background: #fff;
+            border: 1px solid #e5e7eb;
+            border-radius: 4px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            padding: 2rem;
+        }
+        h1, h2, h3 {
+            margin-bottom: 1rem;
+            color: #111827;
+        }
+        h2 { font-size: 1.3rem; }
+        h3 { font-size: 1rem; color: #6b7280; margin-bottom: 1.5rem; }
+
+        .score {
+            font-size: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        .score b { font-weight: 600; }
+
+        .decision {
+            margin-bottom: 2rem;
+            padding: 1rem;
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 4px;
+        }
+        .decision.success { border-left: 4px solid green; }
+        .decision.fail { border-left: 4px solid red; }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 0.8rem;
+            text-align: left;
+        }
+        th {
+            background: #f4f4f4;
+            font-weight: 600;
+        }
+        .correct { color: green; font-weight: 600; }
+        .incorrect { color: red; font-weight: 600; }
+
+        @media (max-width: 768px) {
+            .main-content { margin-left: 0; padding: 1rem; }
+        }
     </style>
 </head>
 <body>
-    <h2>Résultat du QCM pour le poste : {{ poste.nom }}</h2>
+    <div class="main-content">
+        <div class="container">
+            <h1>Résultat du QCM pour le poste : {{ poste.nom }}</h1>
+            <h3>{{ candidat.nom }} {{ candidat.prenom }}</h3>
 
-    <h3>{{ candidat.nom }} {{ candidat.prenom }} </h3>
+            <div class="score">
+                Score obtenu : <b>{{ score.obtenus }}</b> / {{ score.total }}<br>
+                Pourcentage : <b>{{ score.pourcentage }}%</b>
+            </div>
 
-    <div class="score">
-        ✅ Score obtenu : <b>{{ score.obtenus }}</b> / {{ score.total }}<br>
-        📊 Pourcentage : <b>{{ score.pourcentage }}%</b>
+            {% if decision == 0 %}
+                <div class="decision success">
+                    <h3>Test Réussi</h3>
+                    <p>Votre entretien est prévu pour le {{ date_entretien }}</p>
+                </div>
+            {% else %}
+                <div class="decision fail">
+                    <h3>Test Non Réussi</h3>
+                </div>
+            {% endif %}
+
+            <h3>Détails des réponses :</h3>
+            <table>
+                <tr>
+                    <th>Question</th>
+                    <th>Votre réponse</th>
+                    <th>Résultat</th>
+                </tr>
+                {% for r in resultats %}
+                <tr>
+                    <td>{{ r.question }}</td>
+                    <td>
+                        {% if r.reponse_donnee %}
+                            {{ r.reponse_donnee }}
+                        {% else %}
+                            <i>Non répondu</i>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if r.correcte %}
+                            <span class="correct">Correct</span>
+                        {% else %}
+                            <span class="incorrect">Incorrect</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
     </div>
-
-    {%if decision == 0 %}
-        <h2> Afaka manao entretien </h2>
-        <p> votre entretien est prevue pour le {{ date_entretien }} </p>
-    {%  else %}
-        <h2> Tsy afaka manao entretien </h2>
-    {% endif %}
-
-    <h3>Détails des réponses :</h3>
-    <table>
-        <tr>
-            <th>Question</th>
-            <th>Votre réponse</th>
-            <th>Résultat</th>
-        </tr>
-
-        {% for r in resultats %}
-        <tr>
-            <td>{{ r.question }}</td>
-            <td>
-                {% if r.reponse_donnee %}
-                    {{ r.reponse_donnee }}
-                {% else %}
-                    <i>Non répondu</i>
-                {% endif %}
-            </td>
-            <td>
-                {% if r.correcte %}
-                    <span class="correct">✔ Correct</span>
-                {% else %}
-                    <span class="incorrect">✘ Incorrect</span>
-                {% endif %}
-            </td>
-        </tr>
-        {% endfor %}
-    </table>
 </body>
 </html>
