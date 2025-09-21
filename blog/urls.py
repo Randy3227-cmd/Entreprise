@@ -14,6 +14,7 @@ from blog.views.rh.qcm import *
 from blog.views.rh.Entretien import *
 from blog.views.rh.Recruter import recruter
 from blog.views.rh.ClassifierCV import classifier_cv
+from blog.views.rh.filtre import *
 
 urlpatterns = [
     path('', accueil, name='acceuil'),
@@ -33,6 +34,8 @@ urlpatterns = [
     path('rh/entretien/score/', evaluation_score, name="evaluation_score"),
     path('rh/recruter/<int:annonce_id>/', recruter, name='recruter'),
     path('candidat/cv/classifier/<int:annonce_id>/', classifier_cv, name='classifier_cv'),
+    path("annonces/", annonce_list, name="annonce_list"),
+    path("candidats/", candidat_list, name="candidat_list"),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

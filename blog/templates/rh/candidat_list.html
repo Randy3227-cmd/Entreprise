@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Liste des candidats</title>
+</head>
+<body>
+    <h1>Liste des candidats</h1>
+
+    <!-- Formulaire des filtres -->
+    <form id="filter-form">
+        <label>Formation :</label>
+        <select name="formation">
+            <option value="">-- Toutes --</option>
+            {% for f in formations %}
+                <option value="{{ f.id }}">{{ f.description }}</option>
+            {% endfor %}
+        </select>
+
+        <label>Âge min :</label>
+        <input type="number" name="age_min">
+
+        <label>Âge max :</label>
+        <input type="number" name="age_max">
+
+        <label>Adresse :</label>
+        <input type="text" name="adresse">
+
+        <label>Annonce :</label>
+        <select name="annonce">
+            <option value="">-- Toutes --</option>
+            {% for a in annonces %}
+                <option value="{{ a.id }}">{{ a.role }}</option>
+            {% endfor %}
+        </select>
+
+        <label>Créé après :</label>
+        <input type="date" name="date_creation">
+
+        <label>Établissement :</label>
+        <input type="text" name="experience">
+
+        <label>Nom :</label>
+        <input type="text" name="nom">
+
+        <label>Prénom :</label>
+        <input type="text" name="prenom">
+
+        <label>Statut :</label>
+        <select name="statut">
+            <option value="">-- Tous --</option>
+            {% for s in statuts %}
+                <option value="{{ s.id }}">{{ s.description }}</option>
+            {% endfor %}
+        </select>
+    </form>
+
+    <hr>
+
+    <!-- Résultats dynamiques -->
+    <div id="candidat-results">
+        {% include "rh/candidat_results.html" %}
+    </div>
+
+    <script>
+    const form = document.getElementById("filter-form");
+
+    // Fonction AJAX
+    function applyFilters() {
+        let params = new URLSearchParams(new FormData(form)).toString();
+
+        fetch("/candidats/?" + params, {
+            headers: { "X-Requested-With": "XMLHttpRequest" }
+        })
+        .then(response => response.text())
+        .then(html => {
+            document.getElementById("candidat-results").innerHTML = html;
+        });
+    }
+
+    // Déclenche la recherche dès qu’on change un champ
+    form.querySelectorAll("input, select").forEach(el => {
+        el.addEventListener("input", () => {
+            applyFilters();
+        });
+        el.addEventListener("change", () => {
+            applyFilters();
+        });
+    });
+    </script>
+</body>
+</html>

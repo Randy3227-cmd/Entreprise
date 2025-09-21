@@ -60,6 +60,8 @@ class AnnonceCV(models.Model):
 
     def __str__(self):
         return f"{self.annonce} - {self.cv}"
+    
+    
 class AnnonceStatus(models.Model):
     annonce = models.ForeignKey(Annonce, on_delete=models.CASCADE, db_column='id_annonce')
     status = models.BooleanField(blank=True, null=True)

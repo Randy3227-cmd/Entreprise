@@ -11,4 +11,3 @@ INSERT INTO blog_statutcv (description) VALUES
 ('Test valide'),
 ('Entretien reussi'),
 ('Recrute');
-

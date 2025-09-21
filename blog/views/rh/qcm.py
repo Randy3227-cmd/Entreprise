@@ -18,7 +18,7 @@ def showQCM(request, annonce_id, candidat_id):
     test_poste = TestPoste.objects.filter(id_poste=poste_id).first()
     if not test_poste:
         context = {'annonce': annonce, 'poste': poste, 'questions': []}
-        return render(request, 'qcm_template.html', context)
+        return render(request, 'rh/qcm_template.html', context)
 
     test = test_poste.id_test  # objet Test
 

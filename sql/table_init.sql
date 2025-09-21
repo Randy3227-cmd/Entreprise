@@ -39,7 +39,7 @@ CREATE TABLE CV (
     resume TEXT,
     date_creation DATE DEFAULT CURRENT_DATE,
     id_candidat INT NOT NULL,
-    CONSTRAINT fk_cv_candidat FOREIGN *KEY (id_candidat) REFERENCES Candidat(id) ON DELETE CASCADE
+    CONSTRAINT fk_cv_candidat FOREIGN KEY (id_candidat) REFERENCES Candidat(id) ON DELETE CASCADE
 );
 
 CREATE TABLE poste (

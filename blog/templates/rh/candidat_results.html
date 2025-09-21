@@ -1,0 +1,12 @@
+<ul>
+    {% for cv in cvs %}
+        <li>
+            <strong>{{ cv.candidat.prenom }} {{ cv.candidat.nom }}</strong> <br>
+            CV : {{ cv.titre }} ({{ cv.statut.description }}) <br>
+            Adresse : {{ cv.candidat.adresse }} <br>
+            Créé le : {{ cv.date_creation|date:"d/m/Y" }}
+        </li>
+    {% empty %}
+        <li>Aucun candidat trouvé.</li>
+    {% endfor %}
+</ul>
