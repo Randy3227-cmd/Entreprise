@@ -8,7 +8,6 @@ class Candidat(models.Model):
     telephone = models.CharField(max_length=30, null=True, blank=True)
     date_naissance = models.DateField(null=True, blank=True)
     adresse = models.CharField(max_length=255, null=True, blank=True)
-    cin = models.CharField(max_length=255, null=False, blank=False, unique=True)
     
     def __str__(self):
         return f"{self.prenom} {self.nom}"
@@ -27,6 +26,8 @@ class CV(models.Model):
     candidat = models.ForeignKey(Candidat, on_delete=models.CASCADE, related_name="cvs")
     photo = models.ImageField(upload_to='photos_cv/', null=True, blank=True)
     statut = models.ForeignKey(StatutCV, on_delete=models.CASCADE, related_name="statut")
+    cin = models.CharField(max_length=255, null=False, blank=False, unique=True)
+    
     def __str__(self):
         return f"{self.titre} ({self.candidat})"
 
