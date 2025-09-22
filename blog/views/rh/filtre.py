@@ -30,7 +30,7 @@ def annonce_list(request):
     if date_limite:
         annonces = annonces.filter(date_limite_postule__gte=date_limite)
     else:
-        annonces = annonces.filter(date_limite_postule__gte=timezone.now())
+        annonces = annonces.filter(date_limite_postule__gte = timezone.now())
 
     if request.headers.get("x-requested-with") == "XMLHttpRequest":
         return render(request, "rh/annonce_results.html", {"annonces": annonces})

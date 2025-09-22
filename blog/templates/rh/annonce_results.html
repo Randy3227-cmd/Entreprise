@@ -6,7 +6,7 @@
         <p><strong>Horaire :</strong> {{ annonce.horaire_de_travail }} h/semaine</p>
         <p><strong>Date limite :</strong> {{ annonce.date_limite_postule|date:"d/m/Y" }}</p>
 
-        <a href="{% url 'detail_annonceCandidat' annonce.id %}" class="btn btn-primary">
+        <a href="{% url 'detail_annonceRh' annonce.id %}" class="btn btn-primary">
             Voir détails
         </a>
     </div>
