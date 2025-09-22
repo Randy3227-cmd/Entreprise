@@ -5,7 +5,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Candidats pour {{ annonce.role }}</title>
+<title>Classement des CV pour {{ annonce.role }}</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
 <style>
@@ -98,6 +98,18 @@
         color: #6b7280;
     }
 
+    .candidate-score {
+        font-size: 0.9rem;
+        color: #374151;
+        font-weight: 500;
+        background: #f9fafb;
+        padding: 0.3rem 0.8rem;
+        border-radius: 3px;
+        border: 1px solid #d1d5db;
+        display: inline-block;
+        margin-top: 0.5rem;
+    }
+
     /* Corps du CV */
     .cv-body {
         padding: 2rem;
@@ -108,13 +120,13 @@
     .cv-content {
         display: grid;
         grid-template-columns: 1fr 1fr;
-        gap: 2rem;
+        gap: 1.5rem;
     }
 
     .cv-left, .cv-right {
         display: flex;
         flex-direction: column;
-        gap: 1.5rem;
+        gap: 1.2rem;
     }
 
     /* Contact et infos personnelles - minimaliste */
@@ -137,8 +149,12 @@
     .contact-item {
         display: flex;
         align-items: center;
-        margin-bottom: 0.5rem;
+        margin-bottom: 0.7rem;
         font-size: 0.85rem;
+    }
+
+    .contact-item:last-child {
+        margin-bottom: 0;
     }
 
     .contact-item strong {
@@ -154,6 +170,7 @@
         border: 1px solid #e5e7eb;
         border-radius: 2px;
         padding: 1.5rem;
+        margin-bottom: 1.2rem;
     }
 
     .resume-section h3 {
@@ -200,8 +217,8 @@
     }
 
     .formation-item {
-        margin-bottom: 0.8rem;
-        padding-left: 1rem;
+        margin-bottom: 1rem;
+        padding: 0.8rem 0 0.8rem 1rem;
         border-left: 1px solid #d1d5db;
     }
 
@@ -213,17 +230,19 @@
     .skills-container, .languages-container {
         display: flex;
         flex-wrap: wrap;
-        gap: 0.4rem;
+        gap: 0.6rem;
+        margin-top: 0.5rem;
     }
 
     .skill-tag, .language-tag {
         background: #f9fafb;
         color: #374151;
         border: 1px solid #d1d5db;
-        padding: 0.3rem 0.7rem;
+        padding: 0.4rem 0.8rem;
         border-radius: 3px;
         font-size: 0.8rem;
         font-weight: 400;
+        margin: 0;
     }
 
     /* Statut minimaliste */
@@ -277,6 +296,22 @@
         border-color: #9ca3af;
     }
 
+    .empty-state {
+        text-align: center;
+        padding: 4rem 2rem;
+        color: #6b7280;
+        background: #f9fafb;
+        border: 1px solid #e5e7eb;
+        border-radius: 2px;
+    }
+
+    .empty-state h2 {
+        font-size: 1.5rem;
+        font-weight: 500;
+        margin-bottom: 0.5rem;
+        color: #374151;
+    }
+
     @media (max-width: 768px) {
         .cv-content {
             grid-template-columns: 1fr;
@@ -303,157 +338,48 @@
 <body>
 
 <div class="content">
-    {% if messages %}
-    <div>
-        {% for message in messages %}
-            <div class="alert alert-{{ message.tags }}">
-                {{ message }}
-            </div>
-        {% endfor %}
-    </div>
-    {% endif %}
+    <h1>Classement des candidats pour : {{ annonce.role }}</h1>
 
-    <h1>Candidats pour : {{ annonce.role }}</h1>
-
-    <a href="{% url 'classifier_cv' annonce.id %}">
-        <button id="classify-btn" class="back-link" style="margin-bottom: 2rem;">
-            Classification des CV
-        </button>
-    </a>
-    <a href="{% url 'classifier_entretien' annonce.id %}">
-        <button id="classify-btn" class="back-link" style="margin-bottom: 2rem;">
-            Classification totale
-        </button>
-    </a>
-
-    {% if cvs %}
-        <div class="candidates-grid">
-        {% for cv in cvs %}
-            <div class="candidate-card">
-                <!-- En-tête professionnel -->
-                <div class="cv-header">
-                    {% if cv.photo %}
-                        <img src="{{ cv.photo.url }}" alt="Photo de {{ cv.candidat.nom }}" class="candidate-photo">
-                    {% else %}
-                        <div class="candidate-photo-placeholder">
-                            {{ cv.candidat.prenom.0 }}{{ cv.candidat.nom.0 }}
-                        </div>
-                    {% endif %}
-                    <div class="candidate-info">
-                        <div class="candidate-name">{{ cv.candidat.prenom }} {{ cv.candidat.nom }}</div>
-                        <div class="candidate-title">{{ cv.titre }}</div>
-                    </div>
-                </div>
-
-                <div class="cv-body">
-                    <!-- Résumé professionnel en pleine largeur -->
-                    {% if cv.resume %}
-                        <div class="resume-section">
-                            <h3>Profil Professionnel</h3>
-                            <div class="resume-text">{{ cv.resume }}</div>
-                        </div>
-                    {% endif %}
-
-                    <!-- Contenu en deux colonnes -->
-                    <div class="cv-content">
-                        <!-- Colonne gauche -->
-                        <div class="cv-left">
-                            <!-- Contact -->
-                            <div class="contact-section">
-                                <h3>Contact</h3>
-                                <div class="contact-item">
-                                    <strong>Email:</strong> {{ cv.candidat.email }}
-                                </div>
-                                <div class="contact-item">
-                                    <strong>Tél:</strong> {{ cv.candidat.telephone|default:"-" }}
-                                </div>
-                                <div class="contact-item">
-                                    <strong>Né(e) le:</strong> {{ cv.candidat.date_naissance|date:"d/m/Y"|default:"-" }}
-                                </div>
-                                <div class="contact-item">
-                                    <strong>Adresse:</strong> {{ cv.candidat.adresse|default:"-" }}
-                                </div>
-                                <div class="contact-item">
-                                    <strong>CIN:</strong> {{ cv.candidat.cin|default:"-" }}
-                                </div>
-                            </div>
-
-                            <!-- Compétences -->
-                            <div class="cv-section">
-                                <h3>Compétences</h3>
-                                <div class="skills-container">
-                                    {% for c in cv.competences.all %}
-                                        <span class="skill-tag">{{ c.competence }}{% if c.niveau %} ({{ c.niveau }}){% endif %}</span>
-                                    {% empty %}
-                                        <p>Aucune compétence renseignée.</p>
-                                    {% endfor %}
-                                </div>
-                            </div>
-
-                            <!-- Langues -->
-                            <div class="cv-section">
-                                <h3>Langues</h3>
-                                <div class="languages-container">
-                                    {% for l in cv.langues.all %}
-                                        <span class="language-tag">{{ l.langue }}{% if l.niveau %} ({{ l.niveau }}){% endif %}</span>
-                                    {% empty %}
-                                        <p>Aucune langue renseignée.</p>
-                                    {% endfor %}
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Colonne droite -->
-                        <div class="cv-right">
-                            <!-- Formation -->
-                            <div class="cv-section">
-                                <h3>Formation</h3>
-                                {% for f in cv.formations.all %}
-                                    <div class="formation-item">
-                                        <strong>{{ f.formation }}</strong><br>
-                                        <em>{{ f.etablissement }}</em><br>
-                                        <small>{{ f.date_debut|default:"?" }} → {{ f.date_fin|default:"?" }}</small>
-                                    </div>
-                                {% empty %}
-                                    <p>Aucune formation renseignée.</p>
-                                {% endfor %}
-                            </div>
-
-                            <!-- Loisirs -->
-                            <div class="cv-section">
-                                <h3>Centres d'intérêt</h3>
-                                <p>
-                                    {% for lo in cv.loisirs.all %}
-                                        {{ lo.loisir }}{% if not forloop.last %}, {% endif %}
-                                    {% empty %}
-                                        Aucun loisir mentionné.
-                                    {% endfor %}
-                                </p>
-                            </div>
-
-                            <!-- Statut -->
-                            <div class="status-section">
-                                {{ cv.statut }}
-                            </div>
-                        </div>
-                    </div>
-
-                    {% if not statut and cv.statut.description != "Recrute" %}
-                        <button type="button" class="recruit-button"
+    {% if score_total %}
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th>Rang</th>
+                    <th>Nom</th>
+                    <th>Prénom</th>
+                    <th>Score totale</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for score in score_total %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ score.id_candidat.nom }}</td>
+                    <td>{{ score.id_candidat.prenom }}</td>
+                    <td>{{ score.note }}</td>
+                    <td>
+                        <!-- Recruter button - uses the same modal as other pages -->
+                        <button type="button" class="btn btn-sm btn-primary"
                                 data-bs-toggle="modal"
                                 data-bs-target="#recruterModal"
-                                data-candidat-id="{{ cv.candidat.id }}"
-                                data-candidat-nom="{{ cv.candidat.prenom }} {{ cv.candidat.nom }}">
+                                data-candidat-id="{{ score.id_candidat.id }}"
+                                data-candidat-nom="{{ score.id_candidat.prenom }} {{ score.id_candidat.nom }}">
                             Recruter
                         </button>
-                    {% endif %}
-                </div>
-            </div>
-
-        {% endfor %}
-        </div>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4" class="text-center">Aucun score d'entretien disponible.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
     {% else %}
-        <div class="alert alert-secondary">Aucun candidat n'a été reçu pour cette annonce.</div>
+        <div class="alert alert-info">Aucun score d'entretien disponible.</div>
     {% endif %}
 
     <a href="{% url 'detail_annonceRh' annonce.id %}" class="back-link">← Retour à l'annonce</a>
