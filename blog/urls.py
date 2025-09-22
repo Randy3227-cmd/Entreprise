@@ -13,7 +13,7 @@ from blog.views.rh.Accueil import *
 from blog.views.rh.qcm import *
 from blog.views.rh.Entretien import *
 from blog.views.rh.Recruter import recruter
-from blog.views.rh.ClassifierCV import classifier_cv
+from blog.views.rh.ClassifierCV import *
 from blog.views.rh.filtre import *
 
 urlpatterns = [
@@ -34,6 +34,7 @@ urlpatterns = [
     path('rh/entretien/score/', evaluation_score, name="evaluation_score"),
     path('rh/recruter/<int:annonce_id>/', recruter, name='recruter'),
     path('candidat/cv/classifier/<int:annonce_id>/', classifier_cv, name='classifier_cv'),
+    path('candidat/cv/classifierentretien/<int:annonce_id>/', classifier_entretien, name='classifier_entretien'),
     path("annonces/", annonce_list, name="annonce_list"),
     path("candidats/", candidat_list, name="candidat_list"),
 ]
