@@ -2,6 +2,7 @@ from django.shortcuts import get_object_or_404, render
 from blog.models import (
     Annonce, CV,
 )
+from blog.models.rh.rh import ScoreTotal
 from blog.utils.ClassificationCV import score_cv
 
 def classifier_cv(request, annonce_id):
@@ -15,4 +16,12 @@ def classifier_cv(request, annonce_id):
     return render(request, "rh/classement.html", {
         "annonce": annonce,
         "cvs_scores": cvs_scores,
+    })
+
+def classifier_entretien(request, annonce_id):
+    score_total = ScoreTotal.objects.filter(id_annonce=annonce_id).order_by('-note')
+    annonce = get_object_or_404(Annonce, id=annonce_id)
+    return render(request, "rh/classement_entretien.html", {
+        "annonce": annonce,
+        "score_total": score_total,
     })

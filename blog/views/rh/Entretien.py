@@ -96,7 +96,7 @@ def evaluation_score(request):
 
     # Met à jour le statut du CV si réussite
     if note_total >= 10 and cv:
-        cv.statut = StatutCV.objects.get(description='entretien reussi')
+        cv.statut = StatutCV.objects.get(description='Entretien reussi')
         cv.save()
 
     # Récupérer les plannings restants : pas encore notés ET dont l’annonce n’est pas fermée
